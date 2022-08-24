@@ -88,6 +88,8 @@ export async function getArticleFromSlug(slug) {
 
 export async function generateArticles(category) {
     const articles = fs.readdirSync(path.join(ARTICLE_PATH, category));
+
+    if (articles.filter(article => article == ".gitkeep").length) return []; // No articles yet
     return articles.flatMap(currPath => {
         const slug = `${category}/${currPath.replace(".mdx", "")}`;
         const source = fs.readFileSync(
