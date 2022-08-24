@@ -136,9 +136,7 @@ class EmailService {
         const subscribers = await this.getAllSubscribers();
         subscribers.map(email => mailData.bcc.push(email));
 
-        transporter.sendMail(mailData, err => {
-            if (err) throw new Error(err);
-        });
+        await transporter.sendMail(mailData);
 
         // Store newsletter in database
         await Newsletter.create({ html, subject });
