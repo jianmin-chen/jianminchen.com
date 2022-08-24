@@ -71,16 +71,7 @@ export async function getArticleFromSlug(slug) {
             ...data,
             slug: slug,
             readingTime: readingTime(source).text,
-            metadataExcerpt: String(
-                await remark()
-                    .use(strip)
-                    .process(
-                        `${metadataExcerpt}${
-                            metadataExcerpt.length ? "..." : ""
-                        }`
-                    )
-                    .then(res => res)
-            ),
+            metadataExcerpt,
             date: dayjs(data.date.toString()).format("YYYY-MM-DD")
         }
     };
@@ -133,16 +124,7 @@ export async function generateMenu() {
             return {
                 ...data,
                 content,
-                metadataExcerpt: String(
-                    await remark()
-                        .use(strip)
-                        .process(
-                            `${metadataExcerpt}${
-                                metadataExcerpt.length ? "..." : ""
-                            }`
-                        )
-                        .then(res => res)
-                )
+                metadataExcerpt
             };
         })
     );

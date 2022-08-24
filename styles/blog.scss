@@ -30,7 +30,6 @@
     @include use-font("sans-serif");
     -ms-flex-item-align: start;
     align-self: flex-start;
-    font-display: swap;
     padding-left: 2rem;
     position: sticky;
     top: 0;
@@ -42,7 +41,6 @@
 
         h1 {
             @include use-font("cursive");
-            font-display: swap;
             font-size: 7rem;
             margin-bottom: 0;
             line-height: 1;
@@ -55,7 +53,6 @@
 
     #quote {
         @include use-font("serif");
-        font-display: swap;
         font-size: 1.5rem;
         font-style: italic;
         margin: 5px 0;
@@ -191,7 +188,6 @@
 
     code {
         @include use-font("monospace");
-        font-display: swap;
         background: transparent;
         font-size: 1.1rem;
     }
@@ -294,7 +290,6 @@
 
     #newsletter-modal {
         @include use-font("sans-serif");
-        font-display: swap;
         background-color: white;
         font-size: 1.25rem;
         line-height: 1.6;

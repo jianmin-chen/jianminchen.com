@@ -5,18 +5,21 @@
 
 @font-face {
     font-family: "EB Garamond";
+    font-display: swap;
     src: url("../public/fonts/EBGaramond-Variable.ttf");
 }
 
 @font-face {
     font-family: "EB Garamond";
     font-style: italic;
+    font-display: swap;
     src: url("../public/fonts/EBGaramond-VariableItalic.ttf");
 }
 
 @font-face {
     font-family: "EB Garamond";
     font-weight: 600;
+    font-display: swap;
     src: url("../public/fonts/EBGaramond-Variable.ttf");
 }
 
@@ -24,27 +27,32 @@
     font-family: "EB Garamond";
     font-style: italic;
     font-weight: 600;
+    font-display: swap;
     src: url("../public/fonts/EBGaramond-VariableItalic.ttf");
 }
 
 @font-face {
     font-family: "Inter";
+    font-display: swap;
     src: url("../public/fonts/Inter-Variable.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Inter";
     font-weight: 700;
+    font-display: swap;
     src: url("../public/fonts/Inter-Variable.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Fira Mono";
+    font-display: swap;
     src: url("../public/fonts/FiraMono-Regular.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Rhesmanisa";
+    font-display: swap;
     src: url("../public/fonts/Rhesmanisa-Regular.otf") format("opentype");
 }
 
@@ -64,7 +72,6 @@ a {
 body,
 html {
     @include use-font("serif");
-    font-display: swap;
     overflow-x: clip;
     margin: 0;
     padding: 0;
@@ -78,7 +85,6 @@ button {
 button,
 input {
     @include use-font("sans-serif");
-    font-display: swap;
     background-color: transparent;
     border: 0;
     outline: 0;
