@@ -1,0 +1,91 @@
+@import "./mixins.scss";
+@import "./blog.scss";
+@import "./email.scss";
+@import "./mdx.scss";
+
+@font-face {
+    font-family: "EB Garamond";
+    src: url("../public/fonts/EBGaramond-Variable.ttf");
+}
+
+@font-face {
+    font-family: "EB Garamond";
+    font-style: italic;
+    src: url("../public/fonts/EBGaramond-VariableItalic.ttf");
+}
+
+@font-face {
+    font-family: "EB Garamond";
+    font-weight: 600;
+    src: url("../public/fonts/EBGaramond-Variable.ttf");
+}
+
+@font-face {
+    font-family: "EB Garamond";
+    font-style: italic;
+    font-weight: 600;
+    src: url("../public/fonts/EBGaramond-VariableItalic.ttf");
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("../public/fonts/Inter-Variable.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 700;
+    src: url("../public/fonts/Inter-Variable.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Fira Mono";
+    src: url("../public/fonts/FiraMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Rhesmanisa";
+    src: url("../public/fonts/Rhesmanisa-Regular.otf") format("opentype");
+}
+
+::-moz-selection {
+    background-color: rgba(96, 165, 250, 0.25);
+}
+
+::selection {
+    background-color: rgba(96, 165, 250, 0.25);
+}
+
+a {
+    color: #0099ff;
+    cursor: pointer;
+}
+
+body,
+html {
+    @include use-font("serif");
+    font-display: swap;
+    overflow-x: clip;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+button {
+    cursor: pointer;
+}
+
+button,
+input {
+    @include use-font("sans-serif");
+    font-display: swap;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+    font-size: inherit;
+}
+
+textarea {
+    outline: none;
+    resize: none !important;
+}

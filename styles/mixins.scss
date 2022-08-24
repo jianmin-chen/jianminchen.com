@@ -1,0 +1,14 @@
+$min-width: 769.98px;
+$lg-width: 991.98px;
+
+@mixin use-font($type) {
+    @if $type == "serif" {
+        font-family: "EB Garamond", "Georgia", serif;
+    } @else if $type == "sans-serif" {
+        font-family: "Inter", "Nimbus Sans", "San Francisco", sans-serif;
+    } @else if $type == "monospace" {
+        font-family: "Fira Mono", monospace;
+    } @else if $type == "cursive" {
+        font-family: "Rhesmanisa", cursive;
+    }
+}

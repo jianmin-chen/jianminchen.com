@@ -1,0 +1,62 @@
+---
+date: 2022-08-15
+pinned: false
+title: The process of building a raytracer in C
+---
+
+> This is in the process of being written, so check back on it often for updates! (I mean, it literally says *the process of* in the title...)
+
+I borrowed a book called [*The Raytracer Challenge*](http://raytracerchallenge.com/) recently and have decided to step up to the challenge. I'm going to be building a raytracer... in C! Well, I originally wanted to build it in Python, but I haven't played around with C for a while, so we'll see how it goes.
+
+The premise of the book is to write tests while you're writing the raytracer code, which is, dare I say it, kind of enjoyable? The book only provides pseudocode, which I think is a nice change from some of the other programming books I've read. 
+
+Anyways, one of the features to write was a virtual canvas implementation that would translate to a .ppm file. In other words, I was going to use a `struct` containing a multidimensional array.
+
+If you've programmed with C before, you know how well that goes. Especially when you're testing out different methods for writing the structure. You're basically guaranteed to get a segmentation fault at least fifteen times before you figure out the problem.
+
+Eventually, I decided to simply implement a one-dimensional array using what C calls a flexible array member. Apparently, something like this in a struct is legal in C99:
+
+```c
+typedef struct canvas {
+    int width;
+    int height;
+    color *pixels[];
+}
+```
+
+You don't have to define the array length! And later you can just allocate the right memory size and start using it like a normal array:
+
+```c
+canvas *newcanvas(int width, int height)
+{
+    canvas *c = malloc(sizeof(canvas) + sizeof(color * [width * height]));
+    c->width = width;
+    c->height = height;
+    for (int i = 0; i < width * height; i++)
+    {
+        c->pixels[i] = newcolor(0, 0, 0);
+    }
+
+    return c;
+}
+```
+
+Freeing it contains a bit more work since `pixels` is an array of pointers:
+
+```c
+void freecanvas(canvas *c)
+{
+    for (int i = 0; i < c->width * c->height; i++)
+    {
+        free(c->pixels[i]);
+    }
+
+    free(c);
+}
+```
+
+(Did I forget to mention that I totally forgot about freeing memory until I had written a small chunk of the program? Thank goodness that I remembered that `valgrind` actually exists.)
+
+I'm not used to allocating and freeing memory, so it's certainly been a nice brain exercise.
+
+Struggling with strings has certainly been a problem as I continue to write the canvas implementation. I haven't used functions like `sprintf` in a long time, so I did do some deeper digging (I almost wrote *digger deeping* while typing this up; sometime I feel like I have focus issues because I jump all over the place like I am doing now, but hey! this is a fun article) and learned more about some other similar functions, such as `asprintf`, which was ten times more useful, as it prints to a string without needing a predetermined memory size being given to it.

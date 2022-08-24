@@ -1,0 +1,31 @@
+@import "../../styles/mixins.scss";
+
+.tabs {
+    display: flex;
+    width: 100%;
+
+    @media screen and (max-width: $lg-width) {
+        flex-wrap: wrap;
+    }
+}
+
+.tab {
+    border-bottom: 1px solid black;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    text-align: center;
+    text-transform: capitalize;
+    width: 100%;
+
+    @media screen and (min-width: $lg-width) {
+        &.active {
+            border: 1px solid black;
+            border-bottom: 0;
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+        }
+    }
+}
