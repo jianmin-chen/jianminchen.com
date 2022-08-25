@@ -97,7 +97,7 @@ class EmailService {
                                             tagName: "mj-image",
                                             attributes: {
                                                 "align": "left",
-                                                "src": "https://jianminchen.com/assets/signature.webp",
+                                                "src": "https://jianminchen.com/assets/signature.png",
                                                 "padding-bottom": "30px",
                                                 "width": "200px"
                                             }

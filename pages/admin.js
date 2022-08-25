@@ -35,7 +35,7 @@ import config from "../utils/config";
 import showdownConverter from "../utils/showdown";
 import theme from "../utils/extendChakra";
 import "highlight.js/styles/base16/ashes.css";
-import signature from "../public/assets/signature.webp";
+import signature from "../public/assets/signature.png";
 
 export default function Newsletter() {
     const [alert, setAlert] = useState({
