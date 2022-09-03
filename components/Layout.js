@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Script from "next/script";
 import { useEffect, useState } from "react";
 import { useSpring, animated } from "react-spring";
 
@@ -119,6 +120,42 @@ export default function Layout({ menu, component }) {
                         <a onClick={() => setNewsletterVisible(true)}>
                             Newsletter
                         </a>
+                    </div>
+                    {/*
+                        <div style={{ marginTop: "2rem" }}>
+                            <iframe
+                                src="https://overengineering.kognise.dev/embed/jianmin"
+                                title="overengineeRING embed"
+                                width="100%"
+                                height="100"
+                                style={{ userSelect: "none" }}
+                                frameBorder="0"
+                            />
+                        </div>
+                    */}
+                    <div style={{ marginTop: "2rem" }}>
+                        <div id="webring-wrapper">
+                            <a
+                                href="https://webring.hackclub.com/"
+                                id="previousBtn"
+                                className="webring-anchor"
+                                title="Previous">
+                                ‹
+                            </a>
+                            <a
+                                href="https://webring.hackclub.com/"
+                                className="webring-logo"
+                                title="Hack Club Webring"
+                                alt="Hack Club Webring"></a>
+                            <a
+                                href="https://webring.hackclub.com/"
+                                id="nextBtn"
+                                className="webring-anchor"
+                                title="Next">
+                                ›
+                            </a>
+                            <Script src="https://webring.hackclub.com/public/embed.min.js" />
+                        </div>
                     </div>
                 </div>
                 <div id="blog">

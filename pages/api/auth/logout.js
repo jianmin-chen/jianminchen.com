@@ -1,8 +1,9 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import config from "../../../utils/config";
+import ErrorService from "../../../database/services/email.service";
 
 export default withIronSessionApiRoute(
-    function handler(req, res) {
+    async function handler(req, res) {
         const { method } = req;
         if (method != "GET")
             return res.status(400).json({
@@ -17,9 +18,18 @@ export default withIronSessionApiRoute(
                 reason: "Looks like you're not logged in. Try again?"
             });
 
-        req.session.destroy();
-        res.writeHead(302, { location: "/" });
-        return res.status(302).json({ success: true });
+        try {
+            req.session.destroy();
+            res.writeHead(302, { location: "/" });
+            return res.status(302).json({ success: true });
+        } catch (err) {
+            // Log to database
+            await ErrorService.logError({ error: err.message });
+
+            return res
+                .status(500)
+                .json({ success: false, reason: err.message });
+        }
     },
     {
         cookieName: config.AUTH_TOKEN,

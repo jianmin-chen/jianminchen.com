@@ -381,7 +381,7 @@ export default function Newsletter() {
                                 <Box
                                     px={{ base: 0, md: 14 }}
                                     py={{ base: 0, md: 7 }}>
-                                    {pastNewsletters.length && (
+                                    {pastNewsletters.length ? (
                                         <Prose>
                                             <p>Hi there!</p>
                                             <p>
@@ -411,6 +411,12 @@ export default function Newsletter() {
                                             <p id="email-footer">
                                                 Looking to unsubscribe? Just
                                                 reply to this email.
+                                            </p>
+                                        </Prose>
+                                    ) : (
+                                        <Prose>
+                                            <p>
+                                                <i>No newsletters sent yet!</i>
                                             </p>
                                         </Prose>
                                     )}
