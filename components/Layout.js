@@ -133,7 +133,7 @@ export default function Layout({ menu, component }) {
                             />
                         </div>
                     */}
-                    <div style={{ marginTop: "2rem" }}>
+                    <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
                         <div id="webring-wrapper">
                             <a
                                 href="https://webring.hackclub.com/"

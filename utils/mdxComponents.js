@@ -11,5 +11,12 @@ export default {
     ),
     Head,
     Splide,
-    SplideSlide
+    SplideSlide,
+    EditNotice: () => (
+        <blockquote>
+            Hey! This is an article forever in progress. In other words, I'm
+            probably going to tweak it once in a while, because things do
+            change.
+        </blockquote>
+    )
 };
