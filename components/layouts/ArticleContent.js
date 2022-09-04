@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { MDXRemote } from "next-mdx-remote";
 import components from "../../utils/mdxComponents";
 import "highlight.js/styles/base16/ashes.css";
+import { useEffect } from "react";
 
 export default function ArticleContent({
     source,
@@ -15,6 +16,8 @@ export default function ArticleContent({
     category
 }) {
     const router = useRouter();
+
+    console.log(metadataExcerpt);
 
     return (
         <>

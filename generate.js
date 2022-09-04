@@ -71,7 +71,7 @@ export async function getArticleFromSlug(slug) {
             ...data,
             slug: slug,
             readingTime: readingTime(source).text,
-            metadataExcerpt,
+            metadataExcerpt: `${metadataExcerpt}...`,
             date: dayjs(data.date.toString()).format("YYYY-MM-DD")
         }
     };
@@ -124,7 +124,7 @@ export async function generateMenu() {
             return {
                 ...data,
                 content,
-                metadataExcerpt
+                metadataExcerpt: `${metadataExcerpt}...`
             };
         })
     );
