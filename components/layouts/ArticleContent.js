@@ -10,14 +10,14 @@ import { useEffect } from "react";
 export default function ArticleContent({
     source,
     date,
-    metadataExcerpt,
+    excerpt,
     title,
     readingTime,
     category
 }) {
     const router = useRouter();
 
-    console.log(metadataExcerpt);
+    console.log(excerpt);
 
     return (
         <>
@@ -25,19 +25,19 @@ export default function ArticleContent({
                 <title>{`${title} | Jianmin Chen`}</title>
 
                 <meta property="og:title" content={`${title} | Jianmin Chen`} />
-                <meta property="og:description" content={metadataExcerpt} />
+                <meta property="og:description" content={excerpt} />
                 <meta property="og:type" content="article" />
 
                 <meta itemProp="name" content={`${title} | Jianmin Chen`} />
-                <meta itemProp="description" content={metadataExcerpt} />
+                <meta itemProp="description" content={excerpt} />
 
-                <meta name="description" content={metadataExcerpt} />
+                <meta name="description" content={excerpt} />
 
                 <meta
                     name="twitter:title"
                     content={`${title} | JIanmin Chen`}
                 />
-                <meta name="twitter:description" content={metadataExcerpt} />
+                <meta name="twitter:description" content={excerpt} />
             </Head>
             <Link href={`/articles/${category}`}>
                 <a style={{ textDecoration: "none" }}>

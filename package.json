@@ -32,11 +32,9 @@
     "rehype-autolink-headings": "^6.1.1",
     "rehype-highlight": "^5.0.2",
     "rehype-slug": "^5.0.1",
-    "remark": "^14.0.2",
     "remark-gfm": "^3.0.1",
     "showdown": "^2.1.0",
-    "showdown-highlight": "^3.0.0",
-    "strip-markdown": "^5.0.0"
+    "showdown-highlight": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "8.20.0",

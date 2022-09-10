@@ -16,19 +16,6 @@ if (!BCRYPT_SALT_ROUNDS)
         "Please define the BCRYPT_SALT_ROUNDS environment variable inside .env"
     );
 
-const BLOG_EXCERPT_LENGTH = process.env.BLOG_EXCERPT_LENGTH;
-if (!BLOG_EXCERPT_LENGTH)
-    throw new Error(
-        "Please define the BLOG_EXCERPT_LENGTH environment variable inside .env"
-    );
-
-const BLOG_METADATA_EXCERPT_LENGTH = process.env.BLOG_METADATA_EXCERPT_LENGTH;
-if (!BLOG_METADATA_EXCERPT_LENGTH) {
-    throw new Error(
-        "Please define the BLOG_METADATA_EXCERPT_LENGTH environment variable inside .env"
-    );
-}
-
 const BLOG_ARTICLE_PATH = process.env.BLOG_ARTICLE_PATH;
 if (!BLOG_ARTICLE_PATH)
     throw new Error(
@@ -67,8 +54,6 @@ export default {
     AUTH_PASSWORD,
     AUTH_TOKEN,
     BCRYPT_SALT_ROUNDS: Number(BCRYPT_SALT_ROUNDS),
-    BLOG_EXCERPT_LENGTH: Number(BLOG_EXCERPT_LENGTH),
-    BLOG_METADATA_EXCERPT_LENGTH: Number(BLOG_METADATA_EXCERPT_LENGTH),
     BLOG_ARTICLE_PATH,
     BLOG_MENU_PATH,
     EMAIL_USERNAME,

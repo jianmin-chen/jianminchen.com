@@ -18,5 +18,13 @@ export default {
             probably going to tweak it once in a while, because things do
             change.
         </blockquote>
+    ),
+    Video: ({ src, alt, width = "50%", type = "mp4" }) => (
+        <div className="image" style={{ width }}>
+            <video controls style={{ width: "100%" }}>
+                <source src={src} type={`video/${type}`} />
+            </video>
+            <em>{alt}</em>
+        </div>
     )
 };

@@ -3,14 +3,10 @@ import FastGlob from "fast-glob";
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
-import { remark } from "remark";
 import readingTime from "reading-time";
-import strip from "strip-markdown";
 import order from "./_content/_articles/order.js";
 import config from "./utils/config";
 
-const METADATA_EXCERPT_LENGTH = config.BLOG_METADATA_EXCERPT_LENGTH;
-const EXCERPT_LENGTH = config.BLOG_EXCERPT_LENGTH;
 const ARTICLE_PATH = config.BLOG_ARTICLE_PATH;
 const MENU_PATH = config.BLOG_MENU_PATH;
 
@@ -60,10 +56,11 @@ export async function getArticleFromSlug(slug) {
     const source = fs.readFileSync(articleDir);
     const { content, data } = matter(source);
 
-    const metadataExcerpt = content.slice(
-        0,
-        Math.min(METADATA_EXCERPT_LENGTH, content.length)
-    );
+    let excerpt = "No excerpt provided.";
+    let nlnl = content.trim().indexOf("\n\n");
+    if (nlnl !== -1) {
+        excerpt = `${content.slice(0, nlnl)}...`;
+    }
 
     return {
         content,
@@ -71,7 +68,7 @@ export async function getArticleFromSlug(slug) {
             ...data,
             slug: slug,
             readingTime: readingTime(source).text,
-            metadataExcerpt: `${metadataExcerpt}...`,
+            excerpt,
             date: dayjs(data.date.toString()).format("YYYY-MM-DD")
         }
     };
@@ -90,16 +87,17 @@ export async function generateArticles(category) {
 
         if (data.draft && config.NODE_ENV === "production") return []; // Filter out drafts in production mode
 
-        const excerpt = content.slice(
-            0,
-            Math.min(EXCERPT_LENGTH, content.length)
-        );
+        let excerpt = "";
+        let nlnl = content.trim().indexOf("\n\n");
+        if (nlnl !== -1) {
+            excerpt = `${content.slice(0, nlnl)}...`;
+        }
 
         return {
             ...data,
             slug: slug,
             readingTime: readingTime(source).text,
-            excerpt: `${excerpt}${excerpt.length ? "..." : ""}`,
+            excerpt,
             date: dayjs(data.date.toString()).format("YYYY-MM-DD")
         };
     });
@@ -116,15 +114,16 @@ export async function generateMenu() {
             const source = fs.readFileSync(path.join(MENU_PATH, currPath));
             const { content, data } = matter(source);
 
-            const metadataExcerpt = content.slice(
-                0,
-                Math.min(METADATA_EXCERPT_LENGTH, content.length)
-            );
+            let excerpt = "No excerpt provided.";
+            let nlnl = content.trim().indexOf("\n\n");
+            if (nlnl !== -1) {
+                excerpt = `${content.slice(0, nlnl)}...`;
+            }
 
             return {
                 ...data,
                 content,
-                metadataExcerpt: `${metadataExcerpt}...`
+                excerpt
             };
         })
     );
