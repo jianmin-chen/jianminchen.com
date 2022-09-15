@@ -259,6 +259,7 @@ export default function Newsletter() {
                                                 e.target.value
                                             )
                                         }
+                                        // eslint-disable-next-line react/no-unknown-property
                                         py={{ base: 2, lg: 0 }}
                                         placeholder="Newsletter content"
                                         style={{
