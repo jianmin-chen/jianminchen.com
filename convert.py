@@ -8,7 +8,7 @@ from os import remove, walk
 from PIL import Image, ImageOps
 
 
-def format(foldername, ignore, fromtype=["png", "jpg"], totype="webp"):
+def format(foldername, ignore, fromtype=["png", "jpg", "jpeg"], totype="webp"):
     for folder, _, files in walk(foldername):
         for file in files:
             if file in ignore:

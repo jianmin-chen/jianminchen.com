@@ -1,0 +1,29 @@
+---
+date: 2022-09-13
+pinned: false
+title: Fractals in a nutshell.
+---
+
+> This article is largely based off [this](https://workshops.hackclub.com/julia_fractals/) Hack Club workshop! What I've done is included extra, hopefully interesting tidbits.
+
+I did fractals for an independent study project a while ago, and I recently used Julia Sets for a [website](https://cchshackclub.github.io). So I went rooting around in my Google Drive, and my essay for the project magically disappeared. Huh, I wonder why. (Fun fact: I did the independent study project the year before I did one on fractals on Python. I think that's what got me back into programming after I moved, so I only have my teacher to thank.)
+
+Good thing I still have my notes, which I'm going to just consolidate into this post/informal essay!
+
+## What are fractals?
+
+In a nutshell, fractals are infinitely repeating geometric patterns. From Wikipedia:
+
+> In mathematics, a fractal is a geometric shape containing detailed structure at arbitrarily small scales...
+
+Fractals can be super basic, or super complex. This is technically a fractal:
+
+![A fractal composed of lines.](/assets/images/2022-09-13-explaining-fractals/line-fractal.webp)
+
+It's just made of lines, but it's considered a fractal because we're essentially repeating the same line over and over again, just at a smaller scale. **How would we go about creating this fractal?** That's a crucial question to ask every time you're trying to understand a fractal. In our case, we're simply taking a line and dividing it in two. Then, we divide those lines in two, and so on.
+
+A fractal that's a little bit more complex and two-dimensional instead of one-dimensional is the Sierpinski triangle. Perhaps you've seen it before?
+
+![The Sierpinski triangle, made of triangles.](/assets/images/2022-09-13-explaining-fractals/sierpinski-triangle.webp)
+
+It's similar to the line fractal, but we're using triangles. How do we go about generating

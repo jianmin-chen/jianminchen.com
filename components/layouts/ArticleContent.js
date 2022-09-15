@@ -17,8 +17,6 @@ export default function ArticleContent({
 }) {
     const router = useRouter();
 
-    console.log(excerpt);
-
     return (
         <>
             <Head>

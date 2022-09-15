@@ -50,7 +50,7 @@ const NODE_ENV = process.env.NODE_ENV;
 if (!NODE_ENV)
     throw new Error("Please define the NODE_ENV variable inside .env");
 
-export default {
+const config = {
     AUTH_PASSWORD,
     AUTH_TOKEN,
     BCRYPT_SALT_ROUNDS: Number(BCRYPT_SALT_ROUNDS),
@@ -62,3 +62,5 @@ export default {
     MONGODB_URI,
     NODE_ENV
 };
+
+export default config;

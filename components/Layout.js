@@ -1,7 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
-import Script from "next/script";
 import { useEffect, useState } from "react";
 import { useSpring, animated } from "react-spring";
+import hackclubWebring from "../public/assets/hackclub-webring.svg";
 
 export default function Layout({ menu, component }) {
     const [newsletterVisible, setNewsletterVisible] = useState(false);
@@ -60,6 +61,31 @@ export default function Layout({ menu, component }) {
                 })
             );
     };
+
+    const [before, setBefore] = useState({});
+    const [after, setAfter] = useState({});
+    useEffect(() => {
+        // TODO: Import webring(s) here
+        fetch("https://webring.hackclub.com/public/members.json")
+            .then(res => res.json())
+            .then(webring => {
+                let siteIndex = 0;
+                for (let i = 0; i < webring.length; i++) {
+                    if (webring[i].url === "https://jianminchen.com") {
+                        siteIndex = i;
+                        break;
+                    }
+                }
+
+                let previousIndex = siteIndex - 1;
+                if (previousIndex === -1) previousIndex = webring.length - 1;
+                setBefore({ ...before, hackClub: webring[previousIndex].url });
+
+                let nextIndex = siteIndex + 1;
+                if (nextIndex === webring.length) nextIndex = 0;
+                setAfter({ ...after, hackClub: webring[nextIndex].url });
+            });
+    }, [before, after]);
 
     return (
         <>
@@ -134,28 +160,49 @@ export default function Layout({ menu, component }) {
                         </div>
                     */}
                     <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
-                        <div id="webring-wrapper">
-                            <a
-                                href="https://webring.hackclub.com/"
-                                id="previousBtn"
-                                className="webring-anchor"
-                                title="Previous">
-                                ‹
-                            </a>
-                            <a
-                                href="https://webring.hackclub.com/"
-                                className="webring-logo"
-                                title="Hack Club Webring"
-                                alt="Hack Club Webring"></a>
-                            <a
-                                href="https://webring.hackclub.com/"
-                                id="nextBtn"
-                                className="webring-anchor"
-                                title="Next">
-                                ›
-                            </a>
-                            <Script src="https://webring.hackclub.com/public/embed.min.js" />
-                        </div>
+                        {before.hackClub && after.hackClub && (
+                            <>
+                                <style>{`
+                                    #hackclub-webring {
+                                        display: flex;
+                                        align-items: flex-start;
+                                        gap: 4px;
+                                    }
+
+                                    #hackclub-webring a {
+                                        color: rgba(132, 146, 166, 0.8);
+                                        font-size: 28px;
+                                        text-decoration: none;
+                                        transition: color 0.5s;
+                                    }
+                                `}</style>
+                                <div id="hackclub-webring">
+                                    <a
+                                        href={before.hackClub}
+                                        id="previousBtn"
+                                        title="Previous">
+                                        ‹
+                                    </a>
+                                    <a
+                                        href="https://webring.hackclub.com/"
+                                        title="Hack Club Webring">
+                                        <Image
+                                            alt="Hack Club Webring"
+                                            layout="fixed"
+                                            width="36px"
+                                            height="36px"
+                                            src={hackclubWebring}
+                                        />
+                                    </a>
+                                    <a
+                                        href={after.hackClub}
+                                        id="nextBtn"
+                                        title="Next">
+                                        ›
+                                    </a>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
                 <div id="blog">

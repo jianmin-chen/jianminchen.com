@@ -244,6 +244,13 @@
         }
     }
 
+    .thin-media {
+        @media screen and (min-width: $lg-width) {
+            margin: auto;
+            width: 50%;
+        }
+    }
+
     table {
         border-collapse: collapse;
         width: 100%;
@@ -257,6 +264,11 @@
         th {
             padding: 0.8rem;
         }
+    }
+
+    .contains-task-list {
+        list-style-type: none;
+        padding-left: 0;
     }
 
     @media screen and (max-width: $min-width) {
