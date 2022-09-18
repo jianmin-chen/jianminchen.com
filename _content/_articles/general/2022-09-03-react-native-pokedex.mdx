@@ -28,7 +28,7 @@ The final code is located on GitHub at [https://github.com/jianmin-chen/react-na
 
 Here's what we're going to be building:
 
-<Video src="/assets/images/2022-09-03-react-native-pokedex/pokedex.mp4" alt="Here's the final creation on a Google Pixel 6a!"/>
+<Video src="/assets/images/2022-09-03-react-native-pokedex/pokedex.mp4" alt="Video demo of the final app"/>
 
 Pretty cool, right? If you have no idea what [Pokemon](https://en.wikipedia.org/wiki/List_of_Pok%C3%A9mon) or what a [Pokedex](https://en.wikipedia.org/wiki/Gameplay_of_Pok%C3%A9mon#Pok%C3%A9dex) are, you may consider Googling them before we continue. (But most likely you already know what they are, or you wouldn't be reading this, so we'll move on.)
 
@@ -111,7 +111,7 @@ These are the three endpoints we'll be using!
 
 Hey, good question! Imagine React but for app development. That's what React Native is, in a nutshell! React Native takes React code you've written and compiles it to native code - code that can run on iOS (Swift) or Android (Java).
 
-![Bird's eye view of how React Native works.](/assets/images/2022-09-03-react-native-pokedex/react-native.webp)
+![Bird's eye view of how React Native works](/assets/images/2022-09-03-react-native-pokedex/react-native.webp)
 
 *What about Expo?* Well, you can expect that for something like React Native, you're probably going to have to take a lot of steps before you can get your app up and running since you are writing code that needs to be bridged to a completely different programming language. We don't want to spend a half hour debugging that, so we're going to be using [Expo](https://expo.dev). Expo is a tool that allows you to, in the words of their website, "build one project that runs natively on all your users' devices". If React Native is the tool we're using to build our apps, Expo is the tool that makes the tool easier to use.
 
@@ -207,7 +207,7 @@ On your phone, scan the QR code. If you have an iOS device, use the Camera app, 
 Whatever you do, you should get this if there are no errors:
 
 <div className="thin-media">
-    ![Hello, World!](/assets/images/2022-09-03-react-native-pokedex/starter.webp)
+    ![Hello, World! in React Native](/assets/images/2022-09-03-react-native-pokedex/starter.webp)
 </div>
 
 Cool!
@@ -265,8 +265,6 @@ const styles = StyleSheet.create({
 });
 ```
 
-(I'm not a fan of two-spaced tabs.)
-
 Upon first glance, this looks like typical React code. After all, we are exporting a component that contains what is essentially React. However, upon a closer look, we can see a couple of differences. One, we are using the `View` and `Text` components, imported directly from the `react-native` library. Two, we are using what's known as an inline stylesheet, also provided by React Native. `expo` is also providing a status bar, which you can go ahead and remove.
 
 Let's take a look at what React Native is giving us.
@@ -306,7 +304,7 @@ export default function App() {
 This is what you'll get:
 
 <div className="thin-media">
-    ![Huh, the text is a bit weird...](/assets/images/2022-09-03-react-native-pokedex/hello-world-broken.webp)
+    ![Hello, World! is overlapping with the status bar](/assets/images/2022-09-03-react-native-pokedex/hello-world-broken.webp)
 </div>
 
 Yep, that's right. The text is a bit weird. This is because of the status bar. We can fix that easily, actually. How about using React Native's `SafeAreaView`? As its name states, it creates a safer view. Replace `View` with `SafeAreaView`, and the text will be below the status bar, where you might expect it to be.
@@ -338,12 +336,12 @@ Here, we're making use of a bunch of components that React Native gives us: `Pla
 We can do all sorts of cool things. Let's start building our Pokedex by building one of these cards:
 
 <div className="thin-media">
-    ![Pikachu card!](/assets/images/2022-09-03-react-native-pokedex/card.webp)
+    ![Pikachu card](/assets/images/2022-09-03-react-native-pokedex/card.webp)
 </div>
 
 ## Styling our preview cards
 
-Okay, let's start by creating a React component. We can store it in a separate file (similar to React!), so I'll place it inside `components/PreviewCard.js`:
+Okay, let's start by creating a React component. We can store it in a separate file (similar to React!) inside `components/PreviewCard.js`:
 
 ```javascript
 import { Image, StyleSheet, Text, View } from "react-native";
@@ -441,7 +439,7 @@ Now is the time to refresh your Expo app to see your updated changes, if it hasn
 Here's what you should have now:
 
 <div className="thin-media">
-    ![A Pikachu preview card!](/assets/images/2022-09-03-react-native-pokedex/preview-card.webp)
+    ![A Pikachu preview card](/assets/images/2022-09-03-react-native-pokedex/preview-card.webp)
 </div>
 
 Let's fix that top padding by adding a `View` around our app contents inside `App.js`:
@@ -644,7 +642,7 @@ Nothing special here. We've just added a `View` with inline styling containing a
 Now when you refresh your Expo app, you'll see ten preview cards! Refresh it another time, and you'll see ten more.
 
 <div className="thin-media">
-    ![Ten new cards each time!](/assets/images/2022-09-03-react-native-pokedex/card-previews.webp)
+    ![Ten new cards each time](/assets/images/2022-09-03-react-native-pokedex/card-previews.webp)
 </div>
 
 Holy fork, that's so cool! This is pretty much the code inside the branch `milestone-1-preview-cards`. In other words, we're past our first milestone, whoo! The last thing we need to do is move some of the styles inside `components/PreviewCard.js` to a separate file - `components/cardStyles.js` - for use later in other components. Here's what you'll need to move to `components/cardStyles.js`:
@@ -952,7 +950,7 @@ export default function App() {
 And now the search functionality should work beautifully:
 
 <div className="thin-media">
-    ![Yeah, I used to be a Pokemon geek.](/assets/images/2022-09-03-react-native-pokedex/search-functionality.webp)
+    ![Searching up Rayquaza to demonstrate search functionality](/assets/images/2022-09-03-react-native-pokedex/search-functionality.webp)
 </div>
 
 That's it for `milestone-2-search-functionality`! We've passed the second milestone. The next step for us is to add navigation.
@@ -1028,10 +1026,10 @@ This might be a bit overwhelming, so let's take it slow! The first thing we're d
 
 Then, in our JSX, we start by wrapping everything in `NavigationContainer` and `Stack.Navigator`. Notice how we've passed the prop `initialRouteName` to `Stack.Navigator` with the value of "Home". This actually refers to the initial screen to show, based on the name of the screen.
 
-We've created this initial screen using `Stack.Screen`. It has, of course, the value of "Home", and is passed the component `Home`. We're also using the prop `options` - this determines the content of the top header bar. In case you have no idea what I'm referring to:
+We've created this initial screen using `Stack.Screen`. It has, of course, the value of "Home", and is passed the component `Home`. We're also using the prop `options` - this determines the content of the top header bar.
 
 <div className="thin-media">
-    ![Notice how the top bar has the name of the current screen and a "My Pokemon" link/button?](/assets/images/2022-09-03-react-native-pokedex/navigation-header.webp)
+    ![Top bar has the name of the current screen and a "My Pokemon" link/button](/assets/images/2022-09-03-react-native-pokedex/navigation-header.webp)
 </div>
 
 See the "My Pokemon" in the top right corner? We're doing that inside the `options` prop, where we're returning JSX that uses React Native's `TouchableOpacity` to create a clickable link that currently logs "TODO" when pressed. It's basically a `Button`, but without the styles of a button. Instead, it's a view that when pressed, changes opacity briefly. React Native has other `Touchable`s, including `TouchableHighlight` (which we're just about to use) and `TouchableWithoutFeedback`, that you can learn more about by looking at the documentation.
@@ -1232,7 +1230,7 @@ Another cool thing to note is that we're using `style={[cardStyles.image, { bord
 
 Other than that, everything's been covered!
 
-Now it's time to put that stack navigator to use. Let's replace that `console.log("TODO")` in `components/PreviewCard.js`. As I mentioned before, `react-navigation` provides a `route` prop. Well, it turns out that they also provide a `navigation` prop! You can use it to push pages to the stack navigator. 
+Now it's time to put that stack navigator to use. Let's replace that `console.log("TODO")` in `components/PreviewCard.js`. As mentioned before, `react-navigation` provides a `route` prop. Well, it turns out that they also provide a `navigation` prop! You can use it to push pages to the stack navigator. 
 
 However, `react-navigation` only passes it to screens created with `Stack.Screen`, so if we want to use the `navigation` prop, we're going to have to pass it through `screens/Home.js`:
 
@@ -1276,7 +1274,7 @@ navigation.navigate("Info", { name, id, image })
 
 Now you see where the parameters in `route.params` inside `screens/Info.js` are coming from! `navigation.navigate`, if it isn't obvious yet, takes the name of a screen and the props to pass to it, and pushes that screen to the top of the stack, thus taking us there.
 
-Oh wow, I almost forgot. We haven't actually used the `Info` screen with `Stack.Screen`, so none of this code would technically work. Let's do that now, shall we?
+We haven't actually used the `Info` screen with `Stack.Screen`, so none of this code would technically work. Let's do that now, shall we?
 
 ```jsx
 <Stack.Screen
@@ -1303,7 +1301,7 @@ Oh wow, I almost forgot. We haven't actually used the `Info` screen with `Stack.
 
 This should go beneath the Home screen inside `App.js`. Instead of "My Pokemon", the text is "Add" instead.
 
-Alright! Now the page functionality should be just about working. However, if you run this right now, you'll notice that everything has a gray background. I'd like to get rid of the grayish background, which `react-navigation` has added for us. We'll just create some new "classes" inside our inline stylesheets to take care of this by making the whole background white instead of the grayish color. 
+Alright! Now the page functionality should be just about working. However, if you run this right now, you'll notice that everything has a gray background. Let's get rid of this grayish background, which `react-navigation` has added for us. We'll just create some new "classes" inside our inline stylesheets to take care of this by making the whole background white instead of the grayish color. 
 
 Here's `screens/Home.js`:
 
@@ -1361,7 +1359,7 @@ export default function Info() {
 And now the stack navigation works!
 
 <div className="thin-media">
-    ![There's a bunch of new Pokemon that I know nothing about.](/assets/images/2022-09-03-react-native-pokedex/info-page.webp)
+    ![Info page in action for Stakataka](/assets/images/2022-09-03-react-native-pokedex/info-page.webp)
 </div>
 
 Whew! That's `milestone-3-navigation`. We're on the last stretch! Now we've got to add the functionality needed to add and remove a Pokemon.
@@ -1753,7 +1751,7 @@ import Favorites from "./screens/Favorites";
 Here's the final result:
 
 <div className="thin-media">
-    ![I've already added this Pokemon to my list of favorites, so the button says "Remove", as expected.](/assets/images/2022-09-03-react-native-pokedex/remove-pokemon.webp)
+    ![Appletun has already been added, so the button says "Remove", as expected](/assets/images/2022-09-03-react-native-pokedex/remove-pokemon.webp)
 </div>
 
 ## Conclusion
