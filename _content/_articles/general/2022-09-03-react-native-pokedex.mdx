@@ -1,7 +1,7 @@
 ---
 date: 2022-09-03
 pinned: true
-title: Building a Pokedex with React Native in an hour!
+title: Building a Pokedex with React Native in forty-five minutes!
 ---
 
 Let's build a Pokedex with React Native in forty-five minutes! You don't need to know any React Native before going through this, but you will need the following:
@@ -63,7 +63,7 @@ Okay, let's take a look at the API we'll be using now: [PokeAPI](https://pokeapi
 
 You can imagine that we'll be using this to get a list of Pokemon. In fact, we will be using this to get a random list of Pokemon!
 
-Another endpoint that's pretty important to us is `https://pokeapi.co/api/v2/pokemon/${id}](https://pokeapi.co/api/v2/pokemon/`, such as [https://pokeapi.co/api/v2/pokemon/1](https://pokeapi.co/api/v2/pokemon/${id}) for Bulbasaur, who, fun fact, is the very first Pokemon in the Pokedex. This returns JSON that's something like this:
+Another endpoint that's pretty important to us is `https://pokeapi.co/api/v2/pokemon/${id}`, such as [https://pokeapi.co/api/v2/pokemon/1](https://pokeapi.co/api/v2/pokemon/1) for Bulbasaur, who, fun fact, is the very first Pokemon in the Pokedex. This returns JSON that's something like this:
 
 ```json
 {
@@ -113,15 +113,21 @@ Hey, good question! Imagine React but for app development. That's what React Nat
 
 ![Bird's eye view of how React Native works.](/assets/images/2022-09-03-react-native-pokedex/react-native.webp)
 
-*What about Expo?* Well, you can expect that for something like React Native, you're probably going to have to take a lot of steps before you can get your app up and running since you are writing code that needs to be bridged to a completely different programming language. We don't want to spend a half hour debugging that, so we're going to be using [Expo](https://expo.dev). Expo is a tool that allows you to, in the words of the website, "build one project that runs natively on all your users' devices". If React Native is the tool we're using to build our apps, Expo is the tool that makes the tool easier to use.
+*What about Expo?* Well, you can expect that for something like React Native, you're probably going to have to take a lot of steps before you can get your app up and running since you are writing code that needs to be bridged to a completely different programming language. We don't want to spend a half hour debugging that, so we're going to be using [Expo](https://expo.dev). Expo is a tool that allows you to, in the words of their website, "build one project that runs natively on all your users' devices". If React Native is the tool we're using to build our apps, Expo is the tool that makes the tool easier to use.
 
 In fact, we can set up an app, right now, in five minutes or less! Let's start by installing Expo. As mentioned in the prerequisites, Expo requires the following:
 
-* NodeJS LTS release: that means, at the time of this writing, somewhere around 12 - 16. Currently am running `v16.6.0`. If you need to update, [this](https://stackoverflow.com/questions/8191459/how-do-i-update-node-js) Stack Overflow thread may be useful.
+* NodeJS LTS release: that means, at the time of this writing, somewhere around 12 - 16. Try using the latest stable version if possible. If you need to update, [this](https://stackoverflow.com/questions/8191459/how-do-i-update-node-js) Stack Overflow thread may be useful.
 * Git, which you should already have
-* [Watchman](https://facebook.github.io/watchman/docs/install#buildinstall): You only need this if you're on macOS or Windows.
+* [Watchman](https://facebook.github.io/watchman/docs/install#buildinstall): You only need this if you're on macOS or Linux.
 
-We will be using Expo's command line tool to create new React Native projects. After you have these prerequisites, you can install the Expo CLI using `npm`:
+We will be using Expo's command line tool to create new React Native projects. After you have these prerequisites, you can simply use the Expo CLI with `npx`:
+
+```bash
+npx expo
+```
+
+Or if you would rather install it globally:
 
 ```bash
 npm i -g expo-cli
@@ -133,7 +139,7 @@ Okay, we can set up our app now!
 
 ## Setting up our app
 
-Start a new project with `expo init pokedex`, where `pokedex` is the name of our project. Expo will return something like the following:
+Start a new project with `npx expo init pokedex`, where `pokedex` is the name of our project. Expo will return something like the following:
 
 ```plaintext
 ✔ Choose a template: › blank          
@@ -305,14 +311,14 @@ This is what you'll get:
 
 Yep, that's right. The text is a bit weird. This is because of the status bar. We can fix that easily, actually. How about using React Native's `SafeAreaView`? As its name states, it creates a safer view. Replace `View` with `SafeAreaView`, and the text will be below the status bar, where you might expect it to be.
 
-Well, at least on iOS devices, since `SafeAreaView` only supports iOS devices. No worries though - we can write our own, using inline stylesheets, combined with some components that React Native provides us:
+Well, at least on iOS devices, since `SafeAreaView` only supports iOS devices. No worries though - we can write our own for Android, using inline stylesheets, combined with some components that React Native provides us:
 
 ```javascript
-import { Platform, StyleSheet, Text, SafeAreaView, StatusBar, View } from "react-native";
+import { Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 
 const styles = StyleSheet.create({
     AndroidSafeView: {
-        paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : 0
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
     }
 });
 
@@ -403,19 +409,21 @@ export default function PreviewCard({ name, image }) {
 }
 ```
 
-Type this in! Hopefully, you're already getting the hang of writing an app in React Native - it's basically the same as writing React! Well, let's take a look at this. First up, we're importing a couple of components from `react-native`. Then, we create an inline stylesheet containing the keys styles for `card`, `image`, and `title`. These are analogous to CSS classes. Later on, we use these styles in our components. One of the neat things we've done is use a ternary operator. If there is an image provided, we'll use the URI provided inside an `Image` component, which needs to have the following props provided to it: `uri`, the location of the image; `width`; and `height`. 
+Type this in! Hopefully, you're already getting the hang of writing an app in React Native - it's basically the same as writing React! Well, let's take a look at this. First up, we're importing a couple of components from `react-native`. Then, we create an inline stylesheet containing the keys `card`, `image`, and `title`. These are analogous to CSS classes. Later on, we use these styles in our components. One of the neat things we've done is use a ternary operator. If there is an image provided, we'll use the URI provided inside an `Image` component, which needs to have the following props provided to it: `uri`, the location of the image; `width`; and `height`. 
 
 If there isn't an image, we just have a `Text` component telling us that there is no image available. You've most likely seen this ternary operator pattern before.
+
+You may also notice `style={{ alignSelf: "center" }}` inside the `Image` component. In addition to inline stylesheets, we can use inline styling, which is something you've probably seen before if you've used NextJS or a CSS-in-JS library like [`theme-ui`](https://theme-ui.com/), for example.
 
 Of course, the last thing to make this actually work is to use the `PreviewCard` component inside `App.js`:
 
 ```javascript
-import { Platform, StyleSheet, Text, SafeAreaView, StatusBar, View } from "react-native";
+import { Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import PreviewCard from "./components/PreviewCard";
 
 const styles = StyleSheet.create({
     AndroidSafeView: {
-        paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : 0
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
     }
 });
 
@@ -445,8 +453,6 @@ Let's fix that top padding by adding a `View` around our app contents inside `Ap
     </View>
 </SafeAreaView>
 ```
-
-Cool! In addition to inline stylesheets, we can use inline styling, which is something you've probably seen before if you've used NextJS or a CSS-in-JS library like [`theme-ui`](https://theme-ui.com/), for example.
 
 We're ready for another challenge. How about using PokeAPI to generate a list of random Pokemon preview cards?
 
@@ -499,7 +505,7 @@ To use these functions, we're going to have to use some React hooks - `useState`
 
 ```javascript
 import { useState, useEffect } from "react";
-// Rest of code
+// ...
 ```
 
 Okay, let's set up an array with `useState`:
@@ -550,7 +556,7 @@ Here we're finally making use of the endpoint that returns all the Pokemon. We u
 Let's put this to use now. We can use another component that React Native provides, `FlatList`. `FlatList` allows us to render our child components lazily, which is pretty nice. Here's how that might look: 
 
 ```javascript
-import { FlatList, Platform, StyleSheet, Text, SafeAreaView, StatusBar, View } from "react-native";
+import { FlatList, Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 // ...
 
 export default function App() {
@@ -564,7 +570,7 @@ export default function App() {
                     renderItem={({ item }) => <PreviewCard {...item} />}
                     contentContainerStyle={{
                         paddingTop: 30,
-                        paddingBottom: 30
+                        paddingBottom: 60
                     }}
                 />
             </View>
@@ -573,7 +579,7 @@ export default function App() {
 }
 ```
 
-> *Sidenote*: Check out the React Native [documentation](https://reactnative.dev/docs/components-and-apis)! All the React documentation is so accessible and easy to read, and you'll definitely find it useful.
+> *Sidenote*: Check out the React Native [documentation](https://reactnative.dev/docs/getting-started)! All the React documentation is so accessible and easy to read, and you'll definitely find it useful.
 
 `FlatList`, like the other list components that React Native provides (`SectionList`), takes the props:
 
@@ -610,7 +616,7 @@ export default function App() {
                         renderItem={({ item }) => <PreviewCard {...item} />}
                         contentContainerStyle={{
                             paddingTop: 30,
-                            paddingBottom: 30
+                            paddingBottom: 60
                         }}
                     />
                 ) : (
@@ -635,13 +641,13 @@ export default function App() {
 
 Nothing special here. We've just added a `View` with inline styling containing an `ActivityIndicator`, which upon taking a look at the React Native website, contains a `size` prop.
 
-Now when you refresh your Expo app, you'll see ten preview cards! Refresh it another time, and you'll see ten more. *Exercise for the end: figure out how to refresh on scroll!*
+Now when you refresh your Expo app, you'll see ten preview cards! Refresh it another time, and you'll see ten more.
 
 <div className="thin-media">
     ![Ten new cards each time!](/assets/images/2022-09-03-react-native-pokedex/card-previews.webp)
 </div>
 
-Holy fork, that's so cool! This is pretty much the code inside the branch `milestone-1-preview-cards`. In other words, we're past our first milestone, whoo! The only exception is that we've moved some of the styles inside `components/PreviewCard.js` to a separate file - `components/cardStyles.js` for use later in other components. Here's what you'll need to move to `components/cardStyles.js`:
+Holy fork, that's so cool! This is pretty much the code inside the branch `milestone-1-preview-cards`. In other words, we're past our first milestone, whoo! The last thing we need to do is move some of the styles inside `components/PreviewCard.js` to a separate file - `components/cardStyles.js` - for use later in other components. Here's what you'll need to move to `components/cardStyles.js`:
 
 ```javascript
 import { StyleSheet } from "react-native";
@@ -665,7 +671,45 @@ export default StyleSheet.create({
 });
 ```
 
-Then, inside `components/cardStyles.js`, you'll also need to import `./cardStyles` and use `cardStyles.image` and `cardStyles.title`.
+Then, inside `components/PreviewCard.js`, you'll also need to import `./cardStyles` and use `cardStyles.image` and `cardStyles.title`. Here's how `components/PreviewCard.js` will end up looking like:
+
+```javascript
+import { Image, StyleSheet, Text, View } from "react-native";
+import cardStyles from "./cardStyles";
+
+const styles = StyleSheet.create({
+    card: {
+        borderWidth: 1,
+        borderColor: "#cbd5e0",
+        borderRadius: 15,
+        marginHorizontal: 30,
+        marginBottom: 15,
+        padding: 30
+    }
+});
+
+export default function PreviewCard({ name, image }) {
+    return (
+        <View style={styles.card}>
+            {image ? (
+                <View style={cardStyles.image}>
+                    <Image
+                        source={{
+                            uri: image,
+                            width: 200,
+                            height: 200
+                        }}
+                        style={{ alignSelf: "center" }}
+                    />
+                </View>
+            ) : (
+                <Text>No image available.</Text>
+            )}
+            <Text style={cardStyles.title}>{name}</Text>
+        </View>
+    );
+}
+```
 
 Alrighty, what's next? Well, it's time to build some search functionality!
 
@@ -680,7 +724,6 @@ export default function App() {
     const [pokemonList, setPokemonList] = useState([]);
 
     useEffect(() => {
-        // ...
         const processListForSearch = async mainList => {
             const pokemonList = mainList.map(pokemon => ({
                 name: format(pokemon.name),
@@ -708,7 +751,7 @@ export default function App() {
 }
 ```
 
-This might not be understandable, but we're basically adding another nested function inside `useEffect`, `processListForSearch`, that will process the results of querying `https://pokeapi.co/api/v2/pokemon?limit=-1` (which returns the entire list of Pokemon, if you don't remember). We'll store each Pokemon's name and URL, for our search.
+We're basically adding another nested function inside `useEffect`, `processListForSearch`, that will process the results of querying `https://pokeapi.co/api/v2/pokemon?limit=-1` (which returns the entire list of Pokemon, if you don't remember). We'll store each Pokemon's name and URL, for our search.
 
 To add search functionality, we're going to be using another React Native component, `TextInput`, which obviously allows us to take in text input. We're also going to make use of the `Button` component, which the user will click on to search for a Pokemon. The resulting JSX looks something like this:
 
@@ -729,7 +772,7 @@ import {
 
 const styles = StyleSheet.create({
     AndroidSafeView: {
-        paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : 0
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
     },
     input: {
         borderBottomWidth: 1,
@@ -752,9 +795,7 @@ export default function App() {
                         placeholder="Search for a Pokemon!"
                         style={{ fontSize: 18, flex: 1 }}
                     />
-                    <Button title="Search">
-                        Search
-                    </Button>
+                    <Button title="Search"/>
                 </View>
                 <View style={{ paddingBottom: 120 }}>
                     {pokemonPreviewList.length > 0 ? (
@@ -764,7 +805,7 @@ export default function App() {
                             renderItem={({ item }) => <PreviewCard {...item} />}
                             contentContainerStyle={{
                                 paddingTop: 30,
-                                paddingBottom: 30
+                                paddingBottom: 60
                             }}
                         />
                     ) : (
@@ -788,7 +829,7 @@ export default function App() {
 }
 ```
 
-Okay, slow down, slow down. First of all, notice how we've updated `styles` with another "class": `input`, which contains the styles for our input container. This is used in one of the `View`s nested inside our `SafeAreaView`.
+Okay, let's slow down for a moment. First of all, notice how we've updated `styles` with another "class": `input`, which contains the styles for our input container. This is used in one of the `View`s nested inside our `SafeAreaView`.
 
 We've also rearranged the JSX, so take note of that. We have an extra `View` container serving as a flex container that holds our `TextInput` and `Button` side by side. You'll notice that these components have props similar to an `<input>` or a `<button>` being used in normal React - for example, we can have an `autoCorrect` prop, we can have a `placeholder` prop, and so on.
 
@@ -796,7 +837,6 @@ How might we go about taking in input? You guessed right - we can do the same th
 
 ```jsx
 const [searchInput, setSearchInput] = useState("");
-const [pokemonList, setPokemonList] = useState([]);
 ```
 
 Now we can go ahead and update our `TextInput`:
@@ -814,9 +854,7 @@ Now we can go ahead and update our `TextInput`:
 Instead of `onChange`, React Native has us use `onChangeText`. Now that we have the input, we can actually use it. That means we're testing for when the user clicks the button. Instead of using `onClick`, React Native uses `onPress`:
 
 ```jsx
-<Button title="Search" onPress={search}>
-    Search
-</Button>
+<Button title="Search" onPress={search}/>
 ```
 
 Of course, we haven't written the `search` function yet, so let's go ahead and do that right now:
@@ -866,9 +904,7 @@ export default function App() {
                         style={{ fontSize: 18, flex: 1 }}
                         value={searchInput}
                     />
-                    <Button title="Search" onPress={search}>
-                        Search
-                    </Button>
+                    <Button title="Search" onPress={search}/>
                 </View>
                 <View style={{ paddingBottom: 120 }}>
                     {pokemonPreviewList.length > 0 ? (
@@ -878,7 +914,7 @@ export default function App() {
                             renderItem={({ item }) => <PreviewCard {...item} />}
                             contentContainerStyle={{
                                 paddingTop: 30,
-                                paddingBottom: 30
+                                paddingBottom: 60
                             }}
                         />
                     ) : searchInput.length > 0 ? (
@@ -923,36 +959,37 @@ That's it for `milestone-2-search-functionality`! We've passed the second milest
 
 ## Adding navigation
 
-Okay, now it's time to add some navigation. There are actually different kinds, of course, such as drawer navigation (the menu opening from the left), tab navigation (bottom tab menu). We're going to be using stack navigation. A stack is a data structure when items are added to the end and items get pushed out first at the end as well. Our app will work similarly:
+Okay, now it's time to add some navigation. There are actually different kinds, of course, such as drawer navigation (the menu opening from the left), tab navigation (bottom tab menu). We're going to be using stack navigation. A stack is a data structure where items are added to the end and items get pushed out first at the end as well. Our app will work similarly:
 
 1. When we click on a Pokemon preview card, the info page for that Pokemon will be added to the top of the stack.
 2. When we click the back button, the info page for that Pokemon will be removed from the top of the stack, thus returning us to our previous Pokemon preview page.
 3. Later on in the final milestone, we're also going to add a third page - a "My Pokemon" page.
 
-Now, React Native doesn't come with navigation by itself. Just like there's an ecosystem of packages around the React framework, there's a bunch of packages built on top of React Native. The one we'll be using for React Native is [React Navigation](https://reactnavigation.org/), which was also built by Expo! They provide a bunch of different options - they even allow you to create a custom navigator as it's called - but we'll focus on stack navigation.
+Now, React Native doesn't come with navigation by itself. Just like there's an ecosystem of packages around the React framework, there's a bunch of packages built on top of React Native. The one we'll be using for React Native is [React Navigation](https://reactnavigation.org/), which was also built by Expo! They provide a bunch of different options - they even allow you to create a custom navigator - but we'll focus on stack navigation.
 
 Start by installing the necessary dependencies:
 
 ```bash
 npx expo install react-native-screens react-native-safe-area-context
-npm install @react-navigation/native @react-navigation/native-stack
+npm install @react-navigation/native @react-navigation/stack
 ```
 
-Okay, now we're ready to add navigation to our code! First up, we have to set up a navigation container that will hold all our pages. If you've used something like `react-router`, this should be familiar. We should store our pages as separate components to make `App.js` easier to work with. Let's move the current app into a component we'll place inside `screens/Home.js`:
+Okay, now we're ready to add navigation to our code! First up, we have to set up a navigation container that will hold all our pages. If you've used something like [`react-router`](https://reactrouter.com/en/main), this should be familiar. We should store our pages as separate components to make `App.js` easier to work with. Let's move the current app into a component we'll place inside `screens/Home.js`:
 
 ```javascript
-// screen/Home.js
+// screens/Home.js - Copy + paste all of App.js in here
 // ...
 export default function Home() {
     // ...
 }
 ```
 
-Now, we can go inside `App.js`, remove the unnecessary imports, and then add the navigation container like so:
+Now, we can go inside `App.js`, remove the unnecessary imports, and then add the navigation container. Here's how `App.js` will end up looking like:
 
 ```javascript
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { Text, TouchableOpacity } from "react-native";
 import Home from "./screens/Home";
 
 const Stack = createStackNavigator();
@@ -989,7 +1026,7 @@ export default function App() {
 
 This might be a bit overwhelming, so let's take it slow! The first thing we're doing is importing what we need - `NavigationContainer` to hold the stack navigator, and `createStackNavigator` to actually create a stack navigator and store it inside `Stack`.
 
-Then, in our JSX, we start by wrapping everything in `NavigationContainer` and `Stack.Navigator`. Notice how we've passed the prop `initialRouteName` to `Stack.Navigator` with the value of "Home". This actually refers to the initial screen showing the name of the screen.
+Then, in our JSX, we start by wrapping everything in `NavigationContainer` and `Stack.Navigator`. Notice how we've passed the prop `initialRouteName` to `Stack.Navigator` with the value of "Home". This actually refers to the initial screen to show, based on the name of the screen.
 
 We've created this initial screen using `Stack.Screen`. It has, of course, the value of "Home", and is passed the component `Home`. We're also using the prop `options` - this determines the content of the top header bar. In case you have no idea what I'm referring to:
 
@@ -1020,7 +1057,7 @@ export default function PreviewCard {
         <TouchableHighlight
             onPress={() => console.log("TODO")}
             underlayColor="white">
-<View style={styles.card}>
+            <View style={styles.card}>
                 {image ? (
                     <View style={cardStyles.image}>
                         <Image
@@ -1048,7 +1085,7 @@ Before we actually add logic to `onPress`, we should probably create an `Info` s
 
 ```javascript
 import { useState, useEffect } from "react";
-import { Image, Text, StyleSheet, ScrollView, View } from "react-native";
+import { Image, Text, ScrollView, StyleSheet, View } from "react-native";
 import cardStyles from "../components/cardStyles";
 
 const styles = StyleSheet.create({
@@ -1189,9 +1226,48 @@ This is useful because one, the name is already formatted, and two, we can use t
 
 Then, in our `useEffect`, we update these. 
 
-Down in our JSX, we're using a bunch of `View`s and `Text`s to render this information, using ternary operators to indicate information that's being loaded. A new component that we're using is `ScrollView`, which indicates a `View` that can be scrolled if necessary. Other than that, everything's been covered!
+Down in our JSX, we're using a bunch of `View`s and `Text`s to render this information, using ternary operators to indicate information that's being loaded. A new component that we're using is `ScrollView`, which indicates a `View` that can be scrolled if necessary. 
 
-Now it's time to put that stack navigator to use. Let's replace that `console.log("TODO")` in `components/PreviewCard.js`. As I mentioned before, `react-navigation` provides a `route` prop. Well, it turns out that they also provide a `navigation` prop! You can use it to push pages to the stack navigator. Let me show you - replace the `console.log("TODO")` inside `components/PreviewCard.js` with this:
+Another cool thing to note is that we're using `style={[cardStyles.image, { borderRadius: 0 }]}`. It turns out that you can use arrays to combine different styles, regardless of whether it's inline styling or from an inline stylesheet. For example, we could do something like `style={[cardStyles.title, cardStyles.image]}`, which would be completely valid.
+
+Other than that, everything's been covered!
+
+Now it's time to put that stack navigator to use. Let's replace that `console.log("TODO")` in `components/PreviewCard.js`. As I mentioned before, `react-navigation` provides a `route` prop. Well, it turns out that they also provide a `navigation` prop! You can use it to push pages to the stack navigator. 
+
+However, `react-navigation` only passes it to screens created with `Stack.Screen`, so if we want to use the `navigation` prop, we're going to have to pass it through `screens/Home.js`:
+
+```javascript
+// ...
+export default function Home({ navigation }) {
+    // ...
+    return (
+        // ...
+        <FlatList
+            data={pokemonPreviewList}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+                <PreviewCard {...item} navigation={navigation} />
+            )}
+            contentContainerStyle={{
+                paddingTop: 30,
+                paddingBottom: 30
+            }}
+        />
+        // ...
+    );
+}
+```
+
+Let's add `navigation` to the destructured props in `components/PreviewCard.js`. We'll also add the `id` prop, which is already passed to the `PreviewCard` component so that we can use it later:
+
+```javascript
+// ...
+export default function PreviewCard({ name, id, image, navigation }) {
+    // ...
+}
+```
+
+And now we can replace the `console.log("TODO")` inside `components/PreviewCard.js` with this:
 
 ```javascript
 // navigation.navigate(screenName, props)
@@ -1262,10 +1338,7 @@ Same thing inside `screens/Info.js`:
 // ...
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "white",
-        flex: 1
-    },
+    container: { backgroundColor: "white", flex: 1 },
     row: {
         borderBottomWidth: 1,
         borderBottomColor: "#cbd5e0",
@@ -1295,9 +1368,9 @@ Whew! That's `milestone-3-navigation`. We're on the last stretch! Now we've got 
 
 ## Add/remove Pokemon feature
 
-Okay. Just like we used `react-navigation` for the navigation, we're going to use a community package for storing Pokemon the user will be adding. Specifically, we're going to be using `react-native-async-storage`.
+Okay. Just like we used `react-navigation` for the navigation, we're going to use a community package for storing Pokemon the user will be adding. Specifically, we're going to be using `@react-native-async-storage/async-storage`.
 
-Storing data with this is a lot like using `localStorage`. They're stored using key-value pairs, where both the key and the value have to be strings. To get around this, we're going to be using `JSON.parse` and `JSON.stringify`. We're going to be storing a list of our favorite Pokemon - their IDs specifically - in local storage so that the user can view info about their favorite Pokemon.
+Storing data with this is a lot like using `localStorage` on the web. They're stored using key-value pairs, where both the key and the value have to be strings. To get around this, we're going to be using `JSON.parse` and `JSON.stringify`. We're going to be storing a list of our favorite Pokemon - their IDs specifically - in local storage so that the user can view info about their favorite Pokemon.
 
 Okay, let's start by installing the library:
 
@@ -1315,7 +1388,7 @@ const FAVORITES_KEY = "favorites";
 
 `FAVORITES_KEY` refers to the key we'll be using to actually store the list of favorite Pokemon. 
 
-How would we go about getting a key-value pair using `react-native-async-storage`? Here's an asynchronous function that does that:
+How would we go about getting a key-value pair using `@react-native-async-storage/async-storage`? Here's an asynchronous function that does that:
 
 ```javascript
 export async function getFavorites() {
@@ -1409,7 +1482,7 @@ export default function AddRemoveFavoriteButton() {
 }
 ```
 
-We start by importing the stuff we'll need, including the functions we just wrote. We also import `useRoute` from `react-navigation`, which lets us access router parameters. We need this instead of directly using the `route` prop because the `route` prop is only passed to `Stack.Screen` components - in other words, it is only passed to screens, *not the components on each screen*. 
+We start by importing the stuff we'll need, including the functions we just wrote. We also import `useRoute` from `@react-navigation/native`, which lets us access router parameters. We need this instead of directly using the `route` prop because the `route` prop is only passed to `Stack.Screen` components - in other words, it is only passed to screens, *not the components on each screen*. 
 
 Now let's add some code to our component:
 
@@ -1634,6 +1707,51 @@ return (
 
 If we're not loading, we can either display the preview cards for the user's favorite Pokemon or we can let the user know they haven't added any favorite Pokemon yet. Otherwise, we'll just display a loading screen. 
 
+The last thing we need to do is actually add `screens/Favorites.js` as a screen, or this won't actually work. This is the current code for the `Home` screen:
+
+```jsx
+<Stack.Screen
+    name="Home"
+    component={Home}
+    options={({ navigation }) => ({
+        headerRight: () => (
+            <TouchableOpacity
+                onPress={() => console.log("TODO")}
+                style={{ marginRight: 15 }}>
+                <Text
+                    style={{
+                        color: "#007aff",
+                        fontSize: 17,
+                        letterSpacing: 0.35
+                    }}>
+                    My Pokemon
+                </Text>
+            </TouchableOpacity>
+        )
+    })}
+/>
+```
+
+We didn't mention it before, but do you notice how there's a `navigation` prop being passed in the prop `options`? We can finally make use of that by replacing `console.log("TODO")`:
+
+```javascript
+navigation.navigate("Favorites")
+```
+
+And of course, we need to create the `Favorites` screen. Let's add it after the `Info` screen:
+
+```jsx
+<Stack.Screen name="Favorites" component={Favorites} />
+```
+
+Make sure you have the screen imported:
+
+```javascript
+import Favorites from "./screens/Favorites";
+```
+
+Here's the final result:
+
 <div className="thin-media">
     ![I've already added this Pokemon to my list of favorites, so the button says "Remove", as expected.](/assets/images/2022-09-03-react-native-pokedex/remove-pokemon.webp)
 </div>
@@ -1648,7 +1766,7 @@ We are finally done! Some resources to continue taking a look at:
 
 And of course, some exercises:
 
-- [ ] Learn how to eject an app using Expo!
+- [ ] Learn how to deploy an app on Expo! Also, try learning how to eject an app from Expo - that is, pure React Native, no Expo.
 - [ ] Experiment with the different navigation methods provided by `react-navigation`
 - [ ] Try out another React Native library!
 - [ ] Incorporate some of the other endpoints provided by PokeAPI into our Pokedex!
