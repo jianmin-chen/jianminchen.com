@@ -60,3 +60,8 @@ void freecanvas(canvas *c)
 I'm not used to allocating and freeing memory, so it's certainly been a nice brain exercise.
 
 Struggling with strings has certainly been a problem as I continue to write the canvas implementation. I haven't used functions like `sprintf` in a long time, so I did do some deeper digging (I almost wrote *digger deeping* while typing this up; sometime I feel like I have focus issues because I jump all over the place like I am doing now, but hey! this is a fun article) and learned more about some other similar functions, such as `asprintf`, which was ten times more useful, as it prints to a string without needing a predetermined memory size being given to it.
+
+Then I realized that `asprintf` was only available on UNIX-based systems, so I wouldn't be able to compile the program on Windows. Now, I want this to be cross-compatible, so I had to rewrite a function that I have previously used `asprintf` for - `canvas_to_ppm`. 
+
+The final function:
+
