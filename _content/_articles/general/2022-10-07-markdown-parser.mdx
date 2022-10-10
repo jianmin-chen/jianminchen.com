@@ -40,9 +40,26 @@ Other than that, I worked on adding **bold** functionality.
 
 Planning to work on adding unordered/ordered list functionality, and potentially working on an edge case I found: the disappearance of newlines in code blocks.
 
+After fixing the disappearance of newlines in code blocks, I worked on the unordered/ordered list functionality, which introduced a new issue. See, the list items were being split into multiple lines. So the HTML would end up looking something like this:
+
+```html
+<ul>
+    <li>Item one</li>
+</ul>
+<ul>
+    <li>Item two</li>
+</ul>
+```
+
+Which is obviously not great. So I wrote some janky code to fix this, in order to put together something functional. I know, I know. I'm trying to think of an elegant way to do this, in a better way. To be honest, I'm not sure how to go about it. And that's okay! This is actually a perfect opportunity for me to read other people's code and implementation, which is actually what I was planning to do eventually.
+
+Other than that, I wanted to work on some front-end stuff. (Aka, an excuse for not using my brain, which has been fried by SAT prep and Markdown logic over the last two days.) So I added a better design, along with `localStorage`! I also set up the files needed to write a TypeScript version of the parser (to learn some TypeScript).
+
+Okay, fine, I got a little bit carried away.
+
 ## Day 7
 
-Planning to work on adding link functionality.
+Planning to work on adding link functionality. Also, I need to rewrite a function, `takeNormal`, which basically takes all the normal characters up to a special character, into one that takes all the normal characters up to a special phrase (vs. character).
 
 ## Day 8 
 
