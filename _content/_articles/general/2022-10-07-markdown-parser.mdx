@@ -21,11 +21,57 @@ Currently, all of the code behind the Markdown parser is in one file; the only d
 
 1. The input gets passed to a function, `parseMarkdown`. This function tries to split up the input into chunks, such as a code block.
 2. These chunks are passed one by one into a function called `processBlock`, which is part of the tokenizer. (More info to be included later.) This tokenizer is responsible for converting, say, using the example before, a code block into an object, or a token, like `{ type: "codeBlock", content: ..., attributes: { lang } }`. This tokenizer is recursive for certain types of content, such as italics.
-3. Once the tokens have been generated, they're parsed, which just means they're transformed into a form closer to HTML. In the case of the parser I've written, it just takes the tokens and creates a tree-like data structure using a object representation for HTML, where each tag is described as `{ name, content, attributes }`.
+3. Once the tokens have been generated, they're parsed, which just means they're transformed into a form closer to HTML. In the case of the parser I've written, it just takes the tokens and creates a tree-like data structure using an object representation for HTML, where each tag is described as `{ name, content, attributes }`.
 4. Finally, the tree that the parser generates is converted into HTML, once again using recursion. One issue here is that of escaping HTML, which `highlight.js` has warned me of already. I might take a closer look into it later.
 
 ## Day 3 & 4
 
 (Like I mentioned before, I'm jumping ahead since I started writing this on day 3.) Today, I figured out how to parse code blocks. After struggling with it for two hours, I finally deleted what I had been writing and rewrote it in a smarter way in ten minutes. Bugs, as they say, take up more time than programming. So does thinking through things.
 
-> I'll include some shots once I'm done! For now, this is a quick writeup.
+## Day 5
+
+Before I got started with anything else, I discovered a little edge case while playing around with the parser: What if the user leaves a code block empty? When I tried it out, the text following the code block was included as part of the code block. Then I realized what was happening: the function that renders the actual HTML after being passed a tree from the parser was treating an empty string (aka empty content) as a signal to mark the tag as `<tag name/>`, meaning that a code block would be translated to `<pre class="language-plaintext hljs"/>` - which would be invalid. I fixed this by designating between empty content with "" and no content with -1.
+
+Another thing I wanted to work on was adding the usage of tabs to the input box. To do this, I built off the first answer to [this](https://stackoverflow.com/questions/2243824/what-is-the-difference-between-string-slice-and-string-substring) Stack Overflow thread and added the ability to stay on a tab, without having to press `Tab` each time you move on to a new line.
+
+Other than that, I worked on adding **bold** functionality. 
+
+## Day 6
+
+Planning to work on adding unordered/ordered list functionality, and potentially working on an edge case I found: the disappearance of newlines in code blocks.
+
+## Day 7
+
+Planning to work on adding link functionality.
+
+## Day 8 
+
+Planning to work on adding image functionality.
+
+## Day 9
+
+Planning to work on fixing any edge cases and cleaning up the code. I might add some extra features if I have enough time:
+
+* Strikethrough
+* Highlight
+* Heading IDs
+
+## Day 10
+
+Planning to finish this write-up, and redirect the demo to my personal domain! Might also continue working on the extra features I mentioned above.
+
+## What I haven't done
+
+It may be important to include what features I haven't added, for learning purposes. I won't be able to work on (at least during the ten-day challenge) the following features:
+
+* Usage of backslashes - `\` - to escape special characters
+* Extended syntax
+	* Tables
+	* Footnotes
+	* Definition lists
+	* Task lists
+	* Emojis
+	* Subscript
+	* Superscript
+
+> I'll include some shots once I'm done! For now, this is a quick write-up.
