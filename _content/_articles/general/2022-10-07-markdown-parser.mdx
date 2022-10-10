@@ -10,10 +10,10 @@ As part of a [ten-day challenge](https://events.hackclub.com/10-days-in-public/)
 
 I'm currently relying on two resources to write the parser:
 
-* [Notes on making a Markdown parser from scratch in JS](https://sarvasvkulpati.com/blog/markdown-parser): No code (I took a look at the demo but not the source code itself), but it does a really good job of explaining concepts like tokenizer &rarr; parser &rarr; the actual HTML generation really well from a theoretical standpoint.
-* [Chapter 6 of *Eloquent JavaScript*, first editon](https://eloquentjavascript.net/1st_edition/chapter6.html): Yes, I know that the current edition is the third one. Yes, I have read half of that and still have yet to finish the other half. Actually, despite being a chapter on functional programming with JavaScript, this provides a lot of insight into writing a Markdown parser, since it explains how to write a basic parser that can parse headings, italics, and footnotes.
+-   [Notes on making a Markdown parser from scratch in JS](https://sarvasvkulpati.com/blog/markdown-parser): No code (I took a look at the demo but not the source code itself), but it does a really good job of explaining concepts like tokenizer &rarr; parser &rarr; the actual HTML generation really well from a theoretical standpoint.
+-   [Chapter 6 of _Eloquent JavaScript_, first editon](https://eloquentjavascript.net/1st_edition/chapter6.html): Yes, I know that the current edition is the third one. Yes, I have read half of that and still have yet to finish the other half. Actually, despite being a chapter on functional programming with JavaScript, this provides a lot of insight into writing a Markdown parser, since it explains how to write a basic parser that can parse headings, italics, and footnotes.
 
-For this challenge, I want to write my own Markdown parser, which essentially means I want to be reliant on tutorials and Stack Overflow as little as possible. This means potentially *convoluted* and idiotic code, which I completely acknowledge. However, it also means that whatever code I'm writing is code that I can learn from. At the same time, I also want to be able to gain a deeper understanding of the terminology behind writing a parser, even if it's particularly basic. Hence, the two articles above.
+For this challenge, I want to write my own Markdown parser, which essentially means I want to be reliant on tutorials and Stack Overflow as little as possible. This means potentially _convoluted_ and idiotic code, which I completely acknowledge. However, it also means that whatever code I'm writing is code that I can learn from. At the same time, I also want to be able to gain a deeper understanding of the terminology behind writing a parser, even if it's particularly basic. Hence, the two articles above.
 
 ## The concept
 
@@ -34,7 +34,7 @@ Before I got started with anything else, I discovered a little edge case while p
 
 Another thing I wanted to work on was adding the usage of tabs to the input box. To do this, I built off the first answer to [this](https://stackoverflow.com/questions/2243824/what-is-the-difference-between-string-slice-and-string-substring) Stack Overflow thread and added the ability to stay on a tab, without having to press `Tab` each time you move on to a new line.
 
-Other than that, I worked on adding **bold** functionality. 
+Other than that, I worked on adding **bold** functionality.
 
 ## Day 6
 
@@ -55,23 +55,23 @@ Which is obviously not great. So I wrote some janky code to fix this, in order t
 
 Other than that, I wanted to work on some front-end stuff. (Aka, an excuse for not using my brain, which has been fried by SAT prep and Markdown logic over the last two days.) So I added a better design, along with `localStorage`! I also set up the files needed to write a TypeScript version of the parser (to learn some TypeScript).
 
-Okay, fine, I got a little bit carried away.
+Okay, fine, I got a little bit carried away. And I just realized that I forgot to add support for nested lists. Duh. Of course.
 
 ## Day 7
 
 Planning to work on adding link functionality. Also, I need to rewrite a function, `takeNormal`, which basically takes all the normal characters up to a special character, into one that takes all the normal characters up to a special phrase (vs. character).
 
-## Day 8 
+## Day 8
 
-Planning to work on adding image functionality.
+Planning to work on adding image functionality, and nested list functionality.
 
 ## Day 9
 
 Planning to work on fixing any edge cases and cleaning up the code. I might add some extra features if I have enough time:
 
-* Strikethrough
-* Highlight
-* Heading IDs
+-   Strikethrough
+-   Highlight
+-   Heading IDs
 
 ## Day 10
 
@@ -81,14 +81,14 @@ Planning to finish this write-up, and redirect the demo to my personal domain! M
 
 It may be important to include what features I haven't added, for learning purposes. I won't be able to work on (at least during the ten-day challenge) the following features:
 
-* Usage of backslashes - `\` - to escape special characters
-* Extended syntax
-	* Tables
-	* Footnotes
-	* Definition lists
-	* Task lists
-	* Emojis
-	* Subscript
-	* Superscript
+-   Usage of backslashes - `\` - to escape special characters
+-   Extended syntax
+    -   Tables
+    -   Footnotes
+    -   Definition lists
+    -   Task lists
+    -   Emojis
+    -   Subscript
+    -   Superscript
 
 > I'll include some shots once I'm done! For now, this is a quick write-up.
