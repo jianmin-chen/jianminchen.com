@@ -10,10 +10,10 @@ As part of a [ten-day challenge](https://events.hackclub.com/10-days-in-public/)
 
 I'm currently relying on two resources to write the parser:
 
--   [Notes on making a Markdown parser from scratch in JS](https://sarvasvkulpati.com/blog/markdown-parser): No code (I took a look at the demo but not the source code itself), but it does a really good job of explaining concepts like tokenizer &rarr; parser &rarr; the actual HTML generation really well from a theoretical standpoint.
--   [Chapter 6 of _Eloquent JavaScript_, first editon](https://eloquentjavascript.net/1st_edition/chapter6.html): Yes, I know that the current edition is the third one. Yes, I have read half of that and still have yet to finish the other half. Actually, despite being a chapter on functional programming with JavaScript, this provides a lot of insight into writing a Markdown parser, since it explains how to write a basic parser that can parse headings, italics, and footnotes.
+* [Notes on making a Markdown parser from scratch in JS](https://sarvasvkulpati.com/blog/markdown-parser): No code (I took a look at the demo but not the source code itself), but it does a really good job of explaining concepts like tokenizer &rarr; parser &rarr; the actual HTML generation really well from a theoretical standpoint.
+* [Chapter 6 of *Eloquent JavaScript*, first edition](https://eloquentjavascript.net/1st_edition/chapter6.html): Yes, I know that the current edition is the third one. Yes, I have read half of that and still have yet to finish the other half. Actually, despite being a chapter on functional programming with JavaScript, this provides a lot of insight into writing a Markdown parser, since it explains how to write a basic parser that can parse headings, italics, and footnotes.
 
-For this challenge, I want to write my own Markdown parser, which essentially means I want to be reliant on tutorials and Stack Overflow as little as possible. This means potentially _convoluted_ and idiotic code, which I completely acknowledge. However, it also means that whatever code I'm writing is code that I can learn from. At the same time, I also want to be able to gain a deeper understanding of the terminology behind writing a parser, even if it's particularly basic. Hence, the two articles above.
+For this challenge, I want to write my own Markdown parser, which essentially means I want to be reliant on tutorials and Stack Overflow as little as possible. This means potentially *convoluted* and idiotic code, which I completely acknowledge. However, it also means that whatever code I'm writing is code that I can learn from. At the same time, I also want to be able to gain a deeper understanding of the terminology behind writing a parser, even if it's particularly basic. Hence, the two articles above.
 
 ## The concept
 
@@ -25,8 +25,7 @@ Currently, all of the code behind the Markdown parser is in one file; the only d
 4. Finally, the tree that the parser generates is converted into HTML, once again using recursion. One issue here is that of escaping HTML, which `highlight.js` has warned me of already. I might take a closer look into it later.
 
 ## Day 3 & 4
-
-(Like I mentioned before, I'm jumping ahead since I started writing this on day 3.) Today, I figured out how to parse code blocks. After struggling with it for two hours, I finally deleted what I had been writing and rewrote it in a smarter way in ten minutes. Bugs, as they say, take up more time than programming. So does thinking through things.
+(Like I mentioned before, I'm jumping ahead since I start writing this on day 3.) Today, I figured out how to parse code blocks. After struggling with it for two hours, I finally deleted what I had been writing and rewrote it in a smarter way in ten minutes. Bugs, as they say, take up more time than programming. So does thinking through things.
 
 ## Day 5
 
@@ -59,36 +58,26 @@ Okay, fine, I got a little bit carried away. And I just realized that I forgot t
 
 ## Day 7
 
-Planning to work on adding link functionality. Also, I need to rewrite a function, `takeNormal`, which basically takes all the normal characters up to a special character, into one that takes all the normal characters up to a special phrase (vs. character).
+I was super busy today... so I just worked on translating some of the code into TypeScript.
 
 ## Day 8
 
-Planning to work on adding image functionality, and nested list functionality.
-
-## Day 9
-
-Planning to work on fixing any edge cases and cleaning up the code. I might add some extra features if I have enough time:
-
--   Strikethrough
--   Highlight
--   Heading IDs
-
-## Day 10
-
-Planning to finish this write-up, and redirect the demo to my personal domain! Might also continue working on the extra features I mentioned above.
+Worked on link and image functionality today! I've been using a decent amount of regular expressions to help with some of the parsing (although some would argue that this is convoluted), and it's actually helping me remember the different regular expression constructs/characters, which is pretty nice. The article I wrote on [rebuilding my blog](https://www.jianminchen.com/article/general/2022-07-28-rebuilding-this-blog) is 100% able to be rendered in my Markdown parser, which is super cool! I'm sure that there are a couple of edge cases I haven't tested yet (I still haven't implemented nested lists, for example), but I'm coding in class, so I can't tackle those at the moment. 
 
 ## What I haven't done
 
 It may be important to include what features I haven't added, for learning purposes. I won't be able to work on (at least during the ten-day challenge) the following features:
 
--   Usage of backslashes - `\` - to escape special characters
--   Extended syntax
-    -   Tables
-    -   Footnotes
-    -   Definition lists
-    -   Task lists
-    -   Emojis
-    -   Subscript
-    -   Superscript
+* Usage of backslashes - `\` - to escape special characters
+	* Tables
+	* Footnotes
+	* Definition lists
+	* Task lists
+	* Emojis
+	* Subscript
+	* Superscript
+	* Highlight
+	* Strikethrough
+	* Heading IDs
 
 > I'll include some shots once I'm done! For now, this is a quick write-up.
