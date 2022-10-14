@@ -64,6 +64,12 @@ I was super busy today... so I just worked on translating some of the code into 
 
 Worked on link and image functionality today! I've been using a decent amount of regular expressions to help with some of the parsing (although some would argue that this is convoluted), and it's actually helping me remember the different regular expression constructs/characters, which is pretty nice. The article I wrote on [rebuilding my blog](https://www.jianminchen.com/article/general/2022-07-28-rebuilding-this-blog) is 100% able to be rendered in my Markdown parser, which is super cool! I'm sure that there are a couple of edge cases I haven't tested yet (I still haven't implemented nested lists, for example), but I'm coding in class, so I can't tackle those at the moment. 
 
+## Day 9
+
+I know I said I wouldn't be working on subscript, superscript, or strikethrough... but I decided to work on them today! Tweaking the `splitBlock` function (which does the actual splitting of blocks into different types of text) has been relatively easy, which is what parsing is supposed to do, really. One thing I've really been able to learn so far from wrwiting this parser is abstraction and how to decide when to write a function that can apply to different values and when to write a function that does a specific thing.
+
+What else did I work on? Well, I actually worked on adding a context menu to the file tree that I implemented on Day 5. The context menu provides a Delete feature currently, but I might add more to it.
+
 ## What I haven't done
 
 It may be important to include what features I haven't added, for learning purposes. I won't be able to work on (at least during the ten-day challenge) the following features:
@@ -73,11 +79,7 @@ It may be important to include what features I haven't added, for learning purpo
 	* Footnotes
 	* Definition lists
 	* Task lists
-	* Emojis
-	* Subscript
-	* Superscript
 	* Highlight
-	* Strikethrough
 	* Heading IDs
 
 > I'll include some shots once I'm done! For now, this is a quick write-up.
