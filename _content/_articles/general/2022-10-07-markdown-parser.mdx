@@ -1,10 +1,8 @@
 ---
 date: 2022-10-07
 pinned: false
-title: Building a basic Markdown parser
+title: Building a basic Markdown parser.
 ---
-
-> This is in the process of being written, so check back on it often for updates!
 
 As part of a [ten-day challenge](https://events.hackclub.com/10-days-in-public/) to work on building something cool, I'm writing a Markdown parser in JavaScript. I'm actually writing this on day three of the challenge, so I'll just skim over the last two days and start documenting the process together.
 
@@ -13,16 +11,24 @@ I'm currently relying on two resources to write the parser:
 * [Notes on making a Markdown parser from scratch in JS](https://sarvasvkulpati.com/blog/markdown-parser): No code (I took a look at the demo but not the source code itself), but it does a really good job of explaining concepts like tokenizer &rarr; parser &rarr; the actual HTML generation really well from a theoretical standpoint.
 * [Chapter 6 of *Eloquent JavaScript*, first edition](https://eloquentjavascript.net/1st_edition/chapter6.html): Yes, I know that the current edition is the third one. Yes, I have read half of that and still have yet to finish the other half. Actually, despite being a chapter on functional programming with JavaScript, this provides a lot of insight into writing a Markdown parser, since it explains how to write a basic parser that can parse headings, italics, and footnotes.
 
-For this challenge, I want to write my own Markdown parser, which essentially means I want to be reliant on tutorials and Stack Overflow as little as possible. This means potentially *convoluted* and idiotic code, which I completely acknowledge. However, it also means that whatever code I'm writing is code that I can learn from. At the same time, I also want to be able to gain a deeper understanding of the terminology behind writing a parser, even if it's particularly basic. Hence, the two articles above.
+For this challenge, I want to write my own Markdown parser, which essentially means I want to be reliant on tutorials and Stack Overflow as little as possible when it comes to writing the Markdown parser. This means potentially *convoluted* and idiotic code, which I completely acknowledge. However, it also means that whatever code I'm writing is code that I can learn from. At the same time, I also want to be able to gain a deeper understanding of the terminology behind writing a parser, even if it's particularly basic. Hence, the two articles above.
 
 ## The concept
 
 Currently, all of the code behind the Markdown parser is in one file; the only dependency is `highlight.js`, for highlighting the code. This is what happens when the user types in input:
 
 1. The input gets passed to a function, `parseMarkdown`. This function tries to split up the input into chunks, such as a code block.
-2. These chunks are passed one by one into a function called `processBlock`, which is part of the tokenizer. (More info to be included later.) This tokenizer is responsible for converting, say, using the example before, a code block into an object, or a token, like `{ type: "codeBlock", content: ..., attributes: { lang } }`. This tokenizer is recursive for certain types of content, such as italics.
+2. These chunks are passed one by one into a function called `processBlock`, which is part of the tokenizer. (More info to be included later. *Update: more info now included, check the final section of this post.*) This tokenizer is responsible for converting, say, using the example before, a code block into an object, or a token, like `{ type: "codeBlock", content: ..., attributes: { lang } }`. This tokenizer is recursive for certain types of content, such as italics.
 3. Once the tokens have been generated, they're parsed, which just means they're transformed into a form closer to HTML. In the case of the parser I've written, it just takes the tokens and creates a tree-like data structure using an object representation for HTML, where each tag is described as `{ name, content, attributes }`.
 4. Finally, the tree that the parser generates is converted into HTML, once again using recursion. One issue here is that of escaping HTML, which `highlight.js` has warned me of already. I might take a closer look into it later.
+
+### Update
+
+I've moved the code into three different files in order to separate the Markdown parser from the frontend logic I worked on after day 6. The files now are:
+
+* `index.js`: The actual frontend logic, which includes various functions for `localStorage` so that files can be saved, as well as usage of `highlight.js`.
+* `parser.js`: The actual Markdown parser. No external dependencies, just a dependency on..
+* `utils.js`: The only function in this file is `escapeHTML`, which is used in both `index.js` and `parser.js` to escape user input. There are entire libraries dedicated to escaping HTML - this function simply escapes the most common HTML entities.
 
 ## Day 3 & 4
 (Like I mentioned before, I'm jumping ahead since I start writing this on day 3.) Today, I figured out how to parse code blocks. After struggling with it for two hours, I finally deleted what I had been writing and rewrote it in a smarter way in ten minutes. Bugs, as they say, take up more time than programming. So does thinking through things.
@@ -31,7 +37,7 @@ Currently, all of the code behind the Markdown parser is in one file; the only d
 
 Before I got started with anything else, I discovered a little edge case while playing around with the parser: What if the user leaves a code block empty? When I tried it out, the text following the code block was included as part of the code block. Then I realized what was happening: the function that renders the actual HTML after being passed a tree from the parser was treating an empty string (aka empty content) as a signal to mark the tag as `<tag name/>`, meaning that a code block would be translated to `<pre class="language-plaintext hljs"/>` - which would be invalid. I fixed this by designating between empty content with "" and no content with -1.
 
-Another thing I wanted to work on was adding the usage of tabs to the input box. To do this, I built off the first answer to [this](https://stackoverflow.com/questions/2243824/what-is-the-difference-between-string-slice-and-string-substring) Stack Overflow thread and added the ability to stay on a tab, without having to press `Tab` each time you move on to a new line.
+Another thing I wanted to work on was adding the usage of tabs to the input box. To do this, I built off the first answer to [this](https://stackoverflow.com/questions/6637341/use-tab-to-indent-in-textarea) Stack Overflow thread and added the ability to stay on a tab, without having to press `Tab` each time you move on to a new line.
 
 Other than that, I worked on adding **bold** functionality.
 
@@ -66,11 +72,27 @@ Worked on link and image functionality today! I've been using a decent amount of
 
 ## Day 9
 
-I know I said I wouldn't be working on subscript, superscript, or strikethrough... but I decided to work on them today! Tweaking the `splitBlock` function (which does the actual splitting of blocks into different types of text) has been relatively easy, which is what parsing is supposed to do, really. One thing I've really been able to learn so far from wrwiting this parser is abstraction and how to decide when to write a function that can apply to different values and when to write a function that does a specific thing.
+I know I said I wouldn't be working on subscript, superscript, or strikethrough... but I decided to work on them today! Tweaking the `splitBlock` function (which does the actual splitting of blocks into different types of text) has been relatively easy, which is what parsing is supposed to do, really. One thing I've really been able to learn so far from writing this parser is abstraction and how to decide when to write a function that can apply to different values and when to write a function that does a specific thing.
 
 What else did I work on? Well, I actually worked on adding a context menu to the file tree that I implemented on Day 5. The context menu provides a Delete feature currently, but I might add more to it.
 
-## What I haven't done
+## Day 10
+
+Not much done on the Markdown parser today. I cleaned up the code, finished writing this post, and also wrote a `README` on using this.
+
+## Final thoughts
+
+Alright, we are past the final stretch for this! I can't believe I actually wrote a Markdown parser in 10 days. I feel like this "x days" challenge was really useful in actually getting me to make progress on building a Markdown parser - in the past I would have worked on it for a few days, before leaving it to gather dust. Also, having others complete the 10 day challenge really held me accountable.
+
+In terms of the code, I'm planning on forking the public [repo](https://github.com/jianmin-chen/markdown-parser) that I created for this parser and linking an Express/AWS API or something so that I can use this Markdown parser for my own (private) writing. Also because I've been wanting to create a personal "dashboard" of sorts for a while - so this will be the perfect opportunity. 
+
+Currently, the TypeScript code for the parser is incomplete. This is stored inside `src/`, and I will be updating it once I've learned enough TypeScript to actually convert the code to TS. I've also really wanted to learn about unit testing, so this Markdown parser will also come in handy for that.
+
+Last but not least, an explanation of how the parser works (from a bird's eye view but more detailed than this post, for sure) is located in the [`README`](https://github.com/jianmin-chen/markdown-parser) of the repo.
+
+And of course, a demo:
+
+### What I haven't done
 
 It may be important to include what features I haven't added, for learning purposes. I won't be able to work on (at least during the ten-day challenge) the following features:
 
@@ -81,5 +103,3 @@ It may be important to include what features I haven't added, for learning purpo
 	* Task lists
 	* Highlight
 	* Heading IDs
-
-> I'll include some shots once I'm done! For now, this is a quick write-up.
