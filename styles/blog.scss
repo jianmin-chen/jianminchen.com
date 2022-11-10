@@ -253,6 +253,8 @@
 
     table {
         border-collapse: collapse;
+        overflow-x: auto;
+        margin-bottom: 2rem;
         width: 100%;
     }
 
@@ -263,6 +265,10 @@
         td,
         th {
             padding: 0.8rem;
+        }
+
+        th {
+            padding-top: 0;
         }
     }
 

@@ -82,7 +82,7 @@ Not much done on the Markdown parser today. I cleaned up the code, finished writ
 
 ## Final thoughts
 
-Alright, we are past the final stretch for this! I can't believe I actually wrote a Markdown parser in 10 days. I feel like this "x days" challenge was really useful in actually getting me to make progress on building a Markdown parser - in the past I would have worked on it for a few days, before leaving it to gather dust. Also, having others complete the 10-day challenge really held me accountable.
+Alright, we are past the final stretch for this! I can't believe I actually wrote a Markdown parser in ten  days. I feel like this "x days" challenge was really useful in actually getting me to make progress on building a Markdown parser - in the past I would have worked on it for a few days, before leaving it to gather dust. Also, having others complete the ten-day challenge really held me accountable.
 
 In terms of the code, I'm planning on forking the public [repo](https://github.com/jianmin-chen/markdown-parser) that I created for this parser and linking an Express/AWS API or something so that I can use this Markdown parser for my own (private) writing. Also because I've been wanting to create a personal "dashboard" of sorts for a while - so this will be the perfect opportunity. 
 
@@ -92,7 +92,7 @@ Last but not least, an explanation of how the parser works (from a bird's eye vi
 
 And of course, a demo:
 
-<Video src="/assets/images/2022-10-07-markdown-parser/demo.mp4" alt="Demo of Markdown parser"/>
+<Video src="https://media.githubusercontent.com/media/jianmin-chen/blog/main/public/assets/images/2022-10-07-markdown-parser/demo.mp4" alt="Demo of Markdown parser"/>
 
 ### What I haven't done
 
@@ -105,3 +105,39 @@ It may be important to include what features I haven't added, for learning purpo
 	* Task lists
 	* Highlight
 	* Heading IDs
+
+## Continuing work
+
+Okay, I know the 10 days already passed, but I decided to keep working on this Markdown editor because I wanted to turn it into a full-fledged tool for personal writing, as mentioned before. And also because I wanted to submit something to the [Congressional App Challenge](https://www.congressionalappchallenge.us/).
+
+I ended up working on a bunch of stuff. One of the first things I did was create a contextmenu for files, which ended up including the ability to delete, rename, or download (as Markdown or HTML) a file. There were a couple of issues I ran into while implementing this - specifically, one that I remember as I'm writing this is using references to class methods in an event listener. Something like this:
+
+```javascript
+class Editor {
+    // ...
+    generateFiletree() {
+        for (let file of this.files) {
+            // ...
+            let button = document.createElement("button");
+            button.innerText = file;
+            button.addEventListener("click", function () {
+                // ? Referencing this, as in the class?
+            });
+        }
+    }
+}
+```
+
+Apparently, you can do something like `let self = this;` outside the event listener and reference it inside the event listener. One of the perks of reinventing the wheel: you become more knowledgeable in the programming language you invented the wheel in.
+
+I also added an algorithm for generating heading IDs (which currently doesn't take into account ID collisions, which is definitely going to be part of the TODO), and task lists, which were relatively easy, considering that they're just unordered lists with checkboxes tacked on. 
+
+Once I was done with all of this, I began working on [Markright](https://markright.jianminchen.com). Obviously, I scaffolded an Express/AWS API and created a basic (but interactive!) landing page. In terms of the Markdown parser, I wanted to implement folders. Unfortunately, due to time constraints, I decided it was better to have single folders anyways. (But also because I'm one of those people who would make a folder a dozen levels deep if I were given the opportunity.) Thus, I replaced the filesystem with a folder filesystem where I could create a new folder and add files inside. Not much was changed - in terms of porting from `localStorage` to AWS, I simply uploaded the JSON content to a file inside an S3 bucket instead of `localStorage`.
+
+Obviously, the way I implemented the filesystem was probably a bit convoluted. Once the judging period for the Congressional App Challenge is over, I'm definitely going to fix it and add a couple of features. For now, the obligatory demo:
+
+<Video src="https://media.githubusercontent.com/media/jianmin-chen/blog/main/public/assets/images/2022-10-07-markdown-parser/markright-demo.mp4" alt="Markright in action!" />
+
+That's it! There's still a bunch of tasks to get around too; since the list of features above is out of date, you can check out the GitHub [repository](https://github.com/jianmin-chen/markdown-parser) for the most up-to-date list. Now that I've mentioned GitHub repositories, you can also check out the GitHub [repository](https://github.com/jianmin-chen/markright) for Markright.
+
+<EditNotice /> 

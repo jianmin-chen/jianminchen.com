@@ -98,7 +98,7 @@ export async function generateArticles(category) {
             slug: slug,
             readingTime: readingTime(source).text,
             excerpt,
-            date: dayjs(data.date.toString()).format("YYYY-MM-DD")
+            date: dayjs(data.date.toString()).format("YYYY-MM-D")
         };
     });
 }

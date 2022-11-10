@@ -17,6 +17,7 @@ def format(foldername, ignore, fromtype=["png", "jpg", "jpeg"], totype="webp"):
             extension = file.split(".")[-1]
             if extension.lower() in fromtype:
                 # Convert
+                print(f"Converting {file} to .webp")
                 image = Image.open(f"{folder}/{file}")
                 converted = ImageOps.exif_transpose(image)
                 converted.save(f"{folder}/{file.rstrip(f'.{extension}')}.{totype}")

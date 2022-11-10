@@ -20,7 +20,7 @@ const mdxComponents = {
         </blockquote>
     ),
     Video: ({ className, src, alt, type = "mp4" }) => (
-        <div className={className}>
+        <div className={`${className} image`}>
             <video controls style={{ width: "100%" }}>
                 <source src={src} type={`video/${type}`} />
             </video>
