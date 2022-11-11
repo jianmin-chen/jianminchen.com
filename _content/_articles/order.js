@@ -1,2 +1,2 @@
-const order = ["general", "opinions", "archives"];
+const order = ["general", "notes", "archives"];
 export default order;
