@@ -1,8 +1,12 @@
 import Filter from "bad-words";
+import Cors from "cors";
 import mongoose from "mongoose";
 import dbConnect from "../../../database/connect";
 
 const filter = new Filter();
+const cors = Cors({
+    methods: ["GET", "POST"]
+});
 const Signature =
     mongoose.models.holiday2022 ||
     mongoose.model(
@@ -17,7 +21,18 @@ const Signature =
         })
     );
 
+function runMiddleware(req, res, fn) {
+    return new Promise((resolve, reject) => {
+        fn(req, res, result => {
+            if (result instanceof Error) return reject(result);
+            return resolve(result);
+        });
+    });
+}
+
 export default async function handler(req, res) {
+    await runMiddleware(req, res, cors);
+
     const { method } = req;
     if (method === "GET") {
         // Get holiday card signatures
@@ -32,12 +47,10 @@ export default async function handler(req, res) {
 
         try {
             const signatures = await Signature.find();
-            return res
-                .status(200)
-                .json({
-                    success: true,
-                    signatures: signatures.map(signature => signature.name)
-                });
+            return res.status(200).json({
+                success: true,
+                signatures: signatures.map(signature => signature.name)
+            });
         } catch (err) {
             return res
                 .status(500)
