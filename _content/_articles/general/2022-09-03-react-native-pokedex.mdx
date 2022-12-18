@@ -485,7 +485,7 @@ const fetchPokemonDetails = async (url, tryNum = 0) => {
 
 All we're doing is creating a function called `fetchPokemonDetails` that will try five times to get a random Pokemon from a `url` argument. If it doesn't exist, we'll try again until we've done it five times. If we do get it, we'll destructure the results after passing it through `JSON.parse` to get the Pokemon's name, ID, and an image we can use. (If you look at the results of calling the API, you get a bunch of sprite images. In our case, we will be using `sprites.other["official-artwork"]`.) Then we return those. 
 
-Now, some Pokemon have names that are made up of two or more words. For example, `https://pokeapi.co/api/v2/pokemon/10148` returns the name "pikachu-partner-cap". We want something like "Pikachu (Partner Cap)". Lets switch out `return { name, id, image };` with `return { name: format(name), id, image };` and write a function inside `App.js` that will format these names for us:
+Now, some Pokemon have names that are made up of two or more words. For example, `https://pokeapi.co/api/v2/pokemon/10148` returns the name "pikachu-partner-cap". We want something like "Pikachu (Partner Cap)". Let's switch out `return { name, id, image };` with `return { name: format(name), id, image };` and write a function inside `App.js` that will format these names for us:
 
 ```javascript
 const format = name => {
