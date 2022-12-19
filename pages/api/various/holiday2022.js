@@ -74,6 +74,13 @@ export default async function handler(req, res) {
                 .json({ success: false, reason: "Name not provided" });
 
         try {
+            const exists = await Signature.findOne({ name });
+            if (exists)
+                return res.status(409).json({
+                    success: false,
+                    error: "Hmm, looks like someone already added that name! Maybe use your full name?"
+                });
+
             await Signature.create({ name: filter.clean(name) });
             return res.status(200).json({
                 success: true
