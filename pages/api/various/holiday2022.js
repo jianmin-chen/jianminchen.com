@@ -5,7 +5,7 @@ import dbConnect from "../../../database/connect";
 
 const filter = new Filter();
 const cors = Cors({
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST", "HEAD"]
 });
 const Signature =
     mongoose.models.holiday2022 ||
