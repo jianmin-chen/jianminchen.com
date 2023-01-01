@@ -1,0 +1,259 @@
+---
+date: 2022-12-29
+pinned: false
+title: Rebuilding my portfolio...
+---
+
+...with a custom HTTP server written from scratch in Python!
+
+Obviously, I designed the [new site](https://portfolio.jianminchen.com) first - written in pure HTML and CSS, none of that extra frontend framework nonsense. (Then again, this blog is written in Next.js, so I can't really complain about using a framework. Also, that reminds me - I have to update this blog sometime soon to Next.js 13! I haven't really taken a deeper look at it yet but it's definitely on my TODO.)
+
+Here's how it ended up looking like:
+
+![Portfolio site](/assets/portfolio.webp)
+
+You'll notice that it's pretty similar to this site - it makes use of borders and CSS transforms in a way I find fun. Plus, a couple of extra features:
+
+* Posts, baby! Yes, the posts are being stored in a folder on the backend and then being served on the front-end, using a custom templating engine (of sorts, haha).
+* Ability to read environment variables. Currently, this is being used to cURL the Spotify API (with an OAuth token) to get what I'm currently listening to.
+
+Of course, the design isn't the coolest part, considering that I've probably iterated on it multiple ([here](https://portfolio-v1.jianminchen.com)'s a version one, and a prospective [version](https://portfolio.jianmin-chen.repl.co)). No, what's cool about it is that it's written from scratch in Python, using only a couple of the default, built-in libraries:
+
+* `json`, to read environment variables from `.env`
+* `os`, to load environment variables directly from the system
+* `urllib` to make API requests to the Spotify API
+* `socket`, which actually powers the HTTP server by listening to client requests.
+
+In fact, you know what, let me just show you the code:
+
+```python
+from os import environ, listdir
+from urllib import request, parse
+from urllib.request import Request, urlopen
+import json, socket
+
+# Load environment variables
+env = {}
+try:
+    with open(".env") as file:
+        for line in file.readlines():
+            key = ""
+            for chr in line:
+                if chr == "=":
+                    break
+                key += chr
+            env[key] = line.lstrip(f"{key}=").strip()
+except:
+    # .env doesn't exist, so just read from system environment variables
+    env = dict(environ)
+
+# Make sure all necessary environment variables exist
+if not env.get("PORT"):
+    raise Exception("Please include the PORT environment variable inside .env")
+if not env.get("SPOTIFY_ENCODED_TOKEN"):
+    raise Exception(
+        "Please include the SPOTIFY_ENCODED_TOKEN environment variable inside .env"
+    )
+if not env.get("SPOTIFY_REFRESH_TOKEN"):
+    raise Exception(
+        "Please include the SPOTIFY_REFRESH_TOKEN environment variable inside .env"
+    )
+
+
+# Functions for templating data
+def listening_to():
+    """Get what I'm listening to on Spotify."""
+    data = parse.urlencode(
+        {
+            "grant_type": "refresh_token",
+            "refresh_token": env.get("SPOTIFY_REFRESH_TOKEN"),
+        }
+    ).encode()
+
+    req = Request("https://accounts.spotify.com/api/token", method="POST", data=data)
+    req.add_header("Content-Type", "application/x-www-form-urlencoded")
+    req.add_header("Authorization", f"Basic {env.get('SPOTIFY_ENCODED_TOKEN')}")
+    res = json.loads(request.urlopen(req).read())
+
+    # Once we get the Spotify refresh token, use it to get what I'm currently listening to
+    req = Request(
+        "https://api.spotify.com/v1/me/player/currently-playing", method="GET"
+    )
+    req.add_header("Accept", "application/json")
+    req.add_header("Content-Type", "application/json")
+    req.add_header("Authorization", f"Bearer {res.get('access_token')}")
+    res = request.urlopen(req).read()
+
+    song_str = "nothing"
+    if len(res):
+        data = json.loads(res)
+        song_str = f"{data.get('item').get('name')} by {', '.join([artist.get('name') for artist in data.get('item').get('artists')])}"
+    return song_str
+
+
+def get_posts():
+    """Get the posts I've made, stored in /posts."""
+    posts = []
+    for file in listdir("./posts"):
+        with open(f"./posts/{file}") as f:
+            posts.append({"date": file.strip(".md"), "content": f.read()})
+    return json.dumps(posts)
+
+
+# Define socket host and port
+SERVER_HOST = "0.0.0.0"
+SERVER_PORT = int(env.get("PORT"))
+
+# Create socket
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind((SERVER_HOST, SERVER_PORT))
+server_socket.listen()
+print(f"Listening on port {SERVER_PORT}")
+
+REQUEST_METHODS = ["GET"]
+
+
+def prefix(filename, data={}):
+    """Return file with prefixed headers, with custom templating for HTML files."""
+    try:
+        with open(filename, encoding="utf-8") as file:
+            content = file.read()
+            for key in data.keys():
+                content = content.replace(f"${{{key}}}", data.get(key))
+            return f"""HTTP/1.0 200 OK\n\n{content}"""
+    except FileNotFoundError:
+        return "HTTP/1.0 404 NOT FOUND"
+    except UnicodeDecodeError:
+        with open(filename, "rb") as file:
+            # This works locally, but doesn't work when deployed by Render, Railway, etc?
+            return file.read()
+
+
+def parse_headers(headers):
+    res = {"general": [], "pairs": {}}
+
+    for header in headers:
+        if len(header) == 0 or header in ["\r", "\n"]:
+            continue
+
+        is_request = False
+        for request_type in REQUEST_METHODS:
+            if header.startswith(request_type):
+                res["pairs"][request_type] = header.lstrip(f"{request_type}").strip()
+                is_request = True
+
+        if is_request:
+            continue
+
+        key = ""
+        for chr in header:
+            if chr == ":":
+                break
+            key += chr
+
+        if len(key) != len(header):
+            res["pairs"][key] = header.lstrip(f"{key}:").strip()
+        else:
+            res["general"].append(key)
+
+        return res
+
+
+while True:
+    try:
+        # Wait for client connections
+        client_connection, client_address = server_socket.accept()
+
+        # Get the client request
+        req = client_connection.recv(1024).decode()
+
+        if req:
+            # Send HTTP response
+            headers = parse_headers(req.split("\n"))
+            if headers["pairs"].get("GET"):
+                route = (
+                    headers["pairs"]["GET"]
+                    .replace("HTTP/1.0", "")
+                    .replace("HTTP/1.1", "")
+                    .replace("HTTP/2.0", "")
+                    .strip()
+                )
+
+                data = {}
+                if route == "/":
+                    # Here's where we add the custom templating data for the / route!
+                    route = "index.html"
+                    data = {"song": listening_to(), "posts": get_posts()}
+
+                response = prefix(route.strip("/"), data)
+                if type(response) == bytes:
+                    client_connection.sendall(response)
+                else:
+                    client_connection.sendall(
+                        response.encode(encoding="ascii", errors="xmlcharrefreplace")
+                    )
+    except Exception as e:
+        print(e)
+    finally:
+        client_connection.close()
+
+server_socket.close()
+```
+
+Only 170 lines for an HTTP server that can serve text-based requests! *I can't get binary data to work, but I'd love to figure that out.*
+
+To be honest, I'm still trying to understand what exactly is going on here. In fact, this technically only listens to one client at a time. (Which is pretty useless, but I'm not expecting a lot of viewers on my portfolio site.) Basically, we create a socket with these lines:
+
+```python
+# Create socket
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind((SERVER_HOST, SERVER_PORT))
+server_socket.listen()
+```
+
+`socket.AF_INET` and `socket.SOCK_STREAM` are constants that set up TCP (I believe `socket` also allows UDP transmission with a different set of constants.) Then, we just bind the socket to a host and a port on that host (`0.0.0.0`, and by default, `3000`, although when I deployed it on [Railway](https://railway.app), I let Railway determine which port to use). Then it just listens!
+
+The `while True` loop is where it does the listening. The client sends in a request (max of 1024 bytes at a time), and then it uses a custom function I wrote called `parse_headers` to actually turn the headers from that request_type into a dictionary that I can use to access the headers. Then, we check if the request is a GET request. If it happens to be a GET request, we'll return the appropriate file based on the route. In this case, for `/`, we return `index.html` as the main file. 
+
+Actually, this is done by the `prefix` function. I named it `prefix` because it was only going to be used to prefix headers to results, but then it turned into a full-fledged function with a basic templating engine for HTML files, so.
+
+Actually, about the templating engine. So when I'm checking if the route is `/`:
+
+```python
+if route == "/":
+    # Here's where we add the custom templating data for the / route!
+    route = "index.html"
+    data = {"song": listening_to(), "posts": get_posts()}
+```
+
+I pass in two pieces of templating data: `song` and `posts`, one for the song I'm currently listening to on Spotify and the other one for posts. Inside `index.html`, this is what they get passed to:
+
+```html
+<!-- ... -->
+<script>
+    // ...
+    const posts = ${posts};
+</script>
+<!-- ... -->
+<div class="alert">
+    Currently listening to <span id="music">${song}</span>.
+</div>
+```
+
+So inside `prefix`, I pretty much just use `replace()` to do the replacement. No special mapping (yet).
+
+That's literally it! I also have some code at the beginning to load in environment variables from `.env`, and of course the functions to get the song I'm currently listening to and the posts I've made, but those are pretty self-explanatory.
+
+### Issues
+
+My main issue is that it doesn't work particularly well for binary data. Actually, strike that - it works great on my local computer, but when deployed to Railway (or generally any other provider similar to Heroku), it doesn't work, giving me this error:
+
+```
+socket.error: (32, 'Broken pipe')
+```
+
+Apparently, according to various Stack Overflow threads, this error appears whenever one of the sockets closes (specifically the client socket, I believe) before the other socket is done writing. So does that mean that the binary data isn't being fully received, leading to a pipe error? I'm not sure how to go about fixing this - the SO threads I've seen so far only deal with not throwing exceptions - but I'm sure it has something to do with polling the client to not close the socket until the data is fully received (i.e., the socket server-side has actually opened the file, read it, and has the data). Definitely something to look more into.
+
+Not an issue, but I also want to add my [scrapbook](https://scrapbook.hackclub.com/jc) info to the page. 
+
+Then again, I kind of did this in a rush, so I should probably expect a few bugs here and there.

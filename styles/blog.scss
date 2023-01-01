@@ -193,12 +193,12 @@
     }
 
     pre {
-        background-color: #151515;
-        border-radius: 0.5rem;
-        -webkit-box-shadow: 0 0.2rem 1.2rem rgba(0, 0, 0, 0.2);
-        box-shadow: 0 0.2rem 1.2rem rgba(0, 0, 0, 0.2);
-        padding: 40px 20px 5px 20px;
-        position: relative;
+        background-color: #151515 !important;
+        border-radius: 0.5rem !important;
+        -webkit-box-shadow: 0 0.2rem 1.2rem rgba(0, 0, 0, 0.2) !important;
+        box-shadow: 0 0.2rem 1.2rem rgba(0, 0, 0, 0.2) !important;
+        padding: 40px 20px 5px 20px !important;
+        position: relative !important;
 
         &::before {
             content: "🔴 🟡 🟢";
@@ -209,11 +209,11 @@
         }
 
         @media screen and (max-width: $lg-width) {
-            overflow-x: auto;
+            overflow-x: auto !important;
         }
 
         @media screen and (min-width: $lg-width) {
-            white-space: pre-wrap;
+            white-space: pre-wrap !important;
         }
     }
 
