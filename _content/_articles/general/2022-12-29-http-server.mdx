@@ -8,7 +8,7 @@ title: Rebuilding my portfolio...
 
 Obviously, I designed the [new site](https://portfolio.jianminchen.com) first - written in pure HTML and CSS, none of that extra frontend framework nonsense. (Then again, this blog is written in Next.js, so I can't really complain about using a framework. Also, that reminds me - I have to update this blog sometime soon to Next.js 13! I haven't really taken a deeper look at it yet but it's definitely on my TODO.)
 
-Here's how it ended up looking like:
+Here's how it ended up looking:
 
 ![Portfolio site](/assets/portfolio.webp)
 
@@ -89,7 +89,11 @@ def listening_to():
     if len(res):
         data = json.loads(res)
         song_str = f"{data.get('item').get('name')} by {', '.join([artist.get('name') for artist in data.get('item').get('artists')])}"
-    return song_str
+    return {
+        "status_code": 200,
+        "content_type": "application/json",
+        "body": json.dumps({"value": song_str}),
+    }
 
 
 def get_posts():
@@ -98,10 +102,12 @@ def get_posts():
     for file in listdir("./posts"):
         with open(f"./posts/{file}") as f:
             posts.append({"date": file.strip(".md"), "content": f.read()})
-    return json.dumps(posts)
+    return json.dumps(
+        sorted(posts, key=lambda x: x["date"].split("-")[::-1], reverse=True)
+    )
 
 
-blank_line = b"\n\n"  # Blank line
+data = {"index.html": {"posts": get_posts()}}
 
 
 class TCPServer:
@@ -139,11 +145,10 @@ class TCPServer:
 class HTTPServer(TCPServer):
     private_files = ["..", "main.py"]  # Add some sense of security
     request_methods = ["GET"]
+    api_routes = {"spotify": listening_to}
     status_codes = {}
     for enum in HTTPStatus:
-        status_codes[enum.value] = str(enum).lstrip("HTTPStatus.")
-
-    data = {"index.html": {"song": listening_to(), "posts": get_posts()}}
+        status_codes[enum.value] = str(enum).lstrip("HTTPStatus.").replace("_", " ")
 
     @classmethod
     def handle_request(cls, data):
@@ -157,36 +162,35 @@ class HTTPServer(TCPServer):
             response_line = cls.response_line(status_code=200)
             response_headers = cls.response_headers({"Content-Type": "text/html"})
             response_body = b"Invalid request method"
-            return b"".join(
-                [response_line, response_headers, blank_line, response_body]
-            )
+            return b"".join([response_line, response_headers, b"\r\n", response_body])
 
     @classmethod
     def response_line(cls, status_code):
         reason = cls.status_codes.get(status_code)
-        line = f"HTTP/1.1 {status_code} {reason}{blank_line}"
+        line = f"HTTP/1.1 {status_code} {reason}\r\n"
         return line.encode()
 
     @classmethod
     def response_headers(cls, headers):
         res = []
         for header in headers.keys():
-            res.append(f"{header}: {headers[header]}{blank_line}".encode())
+            res.append(f"{header}: {headers[header]}\r\n".encode())
         return b"".join(res)
 
     @classmethod
     def render_html(cls, filename):
         response_line = cls.response_line(status_code=200)
-        response_headers = cls.response_headers({"Content-Type": "type/html"})
+        response_headers = cls.response_headers({"Content-Type": "text/html"})
         with open(filename, "rb") as file:
             response_body = file.read()
-            for key in cls.data.get(filename, {}).keys():
+            for key in data.get(filename, {}).keys():
                 # Loop through each key, replacing with appropriate value in file
                 # In a more complex app, this would probably be a function of its own
                 response_body = response_body.replace(
-                    f"${{{key}}}".encode(), cls.data[filename][key].encode()
+                    f"${{{key}}}".encode(), data[filename][key].encode()
                 )
-        return b"".join([response_line, response_headers, blank_line, response_body])
+        res = b"".join([response_line, response_headers, b"\r\n", response_body])
+        return res
 
     @classmethod
     def handle_GET(cls, request):
@@ -202,12 +206,19 @@ class HTTPServer(TCPServer):
             response_headers = cls.response_headers({"Content-Type": content_type})
             with open(filename, "rb") as file:
                 response_body = file.read()
+        elif filename in list(cls.api_routes.keys()):
+            response = cls.api_routes[filename]()
+            response_line = cls.response_line(status_code=response["status_code"])
+            response_headers = cls.response_headers(
+                {"Content-Type": response["content_type"]}
+            )
+            response_body = response["body"].encode()
         else:
             response_line = cls.response_line(status_code=404)
             response_headers = cls.response_headers({"Content-Type": "text/plain"})
             response_body = b"404 Not Found"
 
-        return b"".join([response_line, response_headers, blank_line, response_body])
+        return b"".join([response_line, response_headers, b"\r\n", response_body])
 
 
 class HTTPRequest:
@@ -236,7 +247,7 @@ class HTTPRequest:
         return False
 
     def parse(self, data):
-        lines = data.split(blank_line)
+        lines = data.split(b"\r\n")
         request_line = lines[0]
 
         words = request_line.split(b" ")
@@ -257,12 +268,12 @@ if __name__ == "__main__":
     server.start()
 ```
 
-Only 225 lines of code! I think it's pretty cool. There are a couple of sections. First up, I load my environment variables. There's only three of them:
+Only 230 lines of code! I think it's pretty cool. There are a couple of sections. First up, I load my environment variables. There are only three of them:
 
 -   `PORT`, just the port receiving requests (Railway and most providers already provide this)
 -   `SPOTIFY_ENCODED_TOKEN` and `SPOTIFY_REFRESH_TOKEN`, my Spotify API keys
 
-Afterward, I have two functions, `listening_to()` and `get_posts()`, which are basically functions that get the data I'll be plugging into the `/` route.
+Afterward, I have two functions, `listening_to()` and `get_posts()`, which are basically functions that get the data I'll be either plugging into the `/` route or using in the API routes.
 
 Then, I have three classes. The first one happens to be `TCPServer`, a basic implementation of a barebones TCP server. It listens for requests coming through the predefined port, holding up to five connections in the queue. Technically, there probably won't be more than five connections at a time thanks to the use of threads, where each client connection waits sixty seconds before timing out. The `handle` class method calls `handle_request`, which has no code inside because we actually use `HTTPServer`, which inherits from `TCPServer`.
 
@@ -270,8 +281,8 @@ In `HTTPServer`, I just define a couple of static variables that are important l
 
 -   `private_files`, which prevents users from exiting the folder the application is running in/downloading the main server code
 -   `request_methods`, which is just a list of accepted request methods. I haven't technically turned this into a full-fledged HTTP server (though that would be cool - maybe I could add a Contact Me form or something that would directly email me), so only GET methods are supported.
+-   `api_routes`, which basically contains other API routes (currently only `/spotify`) that might be useful.
 -   `status_codes`, a dictionary of all the possible status codes based on the ones provided by the `http` module.
--   `data`, which just contains data to be injected into HTML files.
 
 `handle_request` is the base method. For context, each HTTP response has to have the following components:
 
@@ -297,11 +308,26 @@ Since we're only dealing with GET requests, this means that `handle_GET` is goin
 2. If the MIME type is `text/html`, then we can use our basic templating class method, `render_html`, to plug in the templating data
 3. Otherwise, just return the file, using the class methods `response_line` and `response_headers` to generate the appropriate description and headers for the response.
 
-If the file doesn't exist, we do the same thing, but instead of returning a `200 OK`, we return `404 Not Found`.
+If the file doesn't exist or the route isn't an API route, we do the same thing, but instead of returning a `200 OK`, we return `404 Not Found`.
+
+However, if it is an API route, we simply run the function linked to that API route inside `api_routes`. Since I only have `/spotify`, the only function that will technically run is going to be `listening_to()`, which returns a dictionary like this:
+
+```python
+{
+    "status_code": 200,
+    "content_type": "application/json",
+    "content": json.dumps({
+        "value": "Style by Taylor Swift"
+    })
+}
+```
+
+So we basically form the HTTP response based on this information. That's how API routes work, in essence!
 
 And that's basically it! Running `python3 main.py` or a similar command will whip the basic, barebones HTTP server.
 
 I have no idea why exactly I decided to write this, but I learned a bunch about TCP/IP and HTTP, so. To be honest, I'm not sure if the multithreading actually works (LOL), but oh well. One thing I've noticed is that my programming skills have really improved overall. I haven't used Python for a hot minute and was able to actually use it, with `@classmethod` and all that jazz.
 
 Signing off,
+
 Amanda
