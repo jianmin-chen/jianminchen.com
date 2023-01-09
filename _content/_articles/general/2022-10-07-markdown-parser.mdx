@@ -92,7 +92,7 @@ Last but not least, an explanation of how the parser works (from a bird's eye vi
 
 And of course, a demo:
 
-<Video src="https://media.githubusercontent.com/media/jianmin-chen/blog/main/public/assets/images/2022-10-07-markdown-parser/demo.mp4" alt="Demo of Markdown parser"/>
+<Video src="https://media.githubusercontent.com/media/jianmin-chen/jianminchen.com/main/public/assets/images/2022-10-07-markdown-parser/demo.mp4" alt="Demo of Markdown parser"/>
 
 ### What I haven't done
 
@@ -134,9 +134,9 @@ I also added an algorithm for generating heading IDs (which currently doesn't ta
 
 Once I was done with all of this, I began working on [Markright](https://markright.jianminchen.com). Obviously, I scaffolded an Express/AWS API and created a basic (but interactive!) landing page. In terms of the Markdown parser, I wanted to implement folders. Unfortunately, due to time constraints, I decided it was better to have single folders anyways. (But also because I'm one of those people who would make a folder a dozen levels deep if I were given the opportunity.) Thus, I replaced the filesystem with a folder filesystem where I could create a new folder and add files inside. Not much was changed - in terms of porting from `localStorage` to AWS, I simply uploaded the JSON content to a file inside an S3 bucket instead of `localStorage`.
 
-Obviously, the way I implemented the filesystem was probably a bit convoluted. Once the judging period for the Congressional App Challenge is over, I'm definitely going to fix it and add a couple of features. For now, the obligatory demo:
+Obviously, the way I implemented the filesystem was probably a bit convoluted. I'm definitely going to fix it and add a couple of features. For now, the obligatory demo:
 
-<Video src="https://media.githubusercontent.com/media/jianmin-chen/blog/main/public/assets/images/2022-10-07-markdown-parser/markright-demo.mp4" alt="Markright in action!" />
+<Video src="https://media.githubusercontent.com/media/jianmin-chen/jianminchen.com/main/public/assets/images/2022-10-07-markdown-parser/markright-demo.mp4" alt="Markright in action!" />
 
 That's it! There's still a bunch of tasks to get around too; since the list of features above is out of date, you can check out the GitHub [repository](https://github.com/jianmin-chen/markdown-parser) for the most up-to-date list. Now that I've mentioned GitHub repositories, you can also check out the GitHub [repository](https://github.com/jianmin-chen/markright) for Markright.
 
